@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="finalProject.mapper.MemberMapper">
+  <insert id="insertMember" parameterType="finalProject.domain.MemberDTO">
+    INSERT INTO member (
+      MEMBER_NUM, MEMBER_ID, MEMBER_PW, MEMBER_NAME,
+      MEMBER_PHONE, MEMBER_EMAIL, MEMBER_BIRTH, MEMBER_GENDER,
+      MEMBER_ADDR, MEMBER_DETAIL_ADDR, MEMBER_POST, MEMBER_IMG
+    )
+    VALUES (
+      #{memberNum}, #{memberId}, #{memberPw}, #{memberName},
+      #{memberPhone}, #{memberEmail}, #{memberBirth}, #{memberGender},
+      #{memberAddr}, #{memberDetailAddr}, #{memberPost}, #{memberImg}
+    )
+  </insert>
+</mapper>
