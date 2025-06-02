@@ -107,14 +107,14 @@
 
     <div class="main-content">
         <h1>게시글 작성</h1>
-        <form action="communityWrite" method="post">
+        <form action="communityInsert" method="post" enctype="multipart/form-data">
 			<table border=1 width=600>
 				<tr><th>회원번호</th>
 					<td><input type="text" name="memNum" value="${memberNum }"/></td></tr>
 				<tr><th>작성자</th>
 					<td><input type="text" name="memNum" value="${memberName }"/></td></tr>
 				<tr><th>제목</th>
-					<td><input type="text" name="commuTitle"/></td></tr>
+					<td><input type="text" name="commuSubject"/></td></tr>
 				<tr><th>내용</th>
 					<td><textarea name="commuContents" style="width: 500px; height: 200px;"></textarea></td></tr>
 			    <tr><th>파일</th>

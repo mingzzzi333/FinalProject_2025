@@ -1,4 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    finalProject.domain.AuthInfoDTO auth =
+        (finalProject.domain.AuthInfoDTO) session.getAttribute("authInfo");
+    if (auth != null) {
+        out.println("세션 있음 → 아이디: " + auth.getUserId() + ", 등급: " + auth.getGrade());
+    } else {
+        out.println("세션 없음");
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +23,18 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
+        
+        .no-style-link {
+        text-decoration: none;   /* 밑줄 제거 */
+        color: inherit;          /* 부모 요소의 색상 따라감 */
+	    }
+	
+	    .no-style-link:hover,
+	    .no-style-link:visited,
+	    .no-style-link:active {
+	        text-decoration: none;
+	        color: inherit;
+	    }
 
         .header {
             width: 100%;
@@ -57,15 +79,15 @@
         }
 
         .search-box input[type="text"] {
-        	width: 800px;     /* 입력창 너비 */
-        	height: 30px;     /* 입력창 높이 */
+            width: 800px;
+            height: 30px;
             padding: 5px;
             font-size: 14px;
         }
 
         .search-box button {
-        	width: 100px;     /* 입력창 너비 */
-        	height: 40px;     /* 입력창 높이 */
+            width: 100px;
+            height: 40px;
             padding: 5px 10px;
             font-size: 14px;
             cursor: pointer;
@@ -82,10 +104,22 @@
 <body>
     <div class="header">
         <div class="header-line1">
-            <div>로고 또는 네비게이션</div>
+            <div><a href="/home" class="no-style-link">로고 또는 네비게이션</a></div>
             <div class="auth-buttons">
-                <a href="/login">로그인</a> |
-                <a href="/member/memberWrite">회원가입</a>
+                <c:choose>
+                    <c:when test="${sessionScope.authInfo.grade == 'mem'}">
+                        <a href="/member/myPage">내 정보</a> |
+                        <a href="/logout">로그아웃</a>
+                    </c:when>
+                    <c:when test="${sessionScope.authInfo.grade == 'emp'}">
+                        <a href="/admin">관리하기</a> |
+                        <a href="/logout">로그아웃</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/login">로그인</a> |
+                        <a href="/member/memberWrite">회원가입</a>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
         <div class="header-line2">
