@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import finalProject.command.MemberCommand;
+import finalProject.service.MemberAutoNumService;
 import finalProject.service.MemberWriteService;
 
 @Controller
@@ -16,9 +17,13 @@ import finalProject.service.MemberWriteService;
 public class MemberController {
 	@Autowired
 	MemberWriteService memberWriteService;
+	@Autowired
+	MemberAutoNumService memberAutoNumService;
 	
+	//자동부여
 	@GetMapping("/memberWrite")
 	public String write(Model model) {
+		memberAutoNumService.execute(model);
 		return "member/memberForm";
 	}
 	
@@ -28,6 +33,8 @@ public class MemberController {
 		memberWriteService.execute(memberCommand);
 		return "login/login";
 	}
+	
+	
 }
 
 

@@ -8,4 +8,6 @@ import finalProject.domain.MemberDTO;
 @Mapper
 public interface MemberMapper {
 	public void insertMember(MemberDTO dto);
+
+    public String memberNumAutoSelect();
 }

@@ -16,4 +16,9 @@
       #{memberAddr}, #{memberDetailAddr}, #{memberPost}, #{memberImg}
     )
   </insert>
+  
+   <!-- 번호자동부여 -->
+    <select id="memberNumAutoSelect" resultType="String">
+    	SELECT CONCAT('mem_', NVL(SUBSTR(MAX(MEMBER_NUM), 5), '100000') + 1) FROM member
+	</select>
 </mapper>
