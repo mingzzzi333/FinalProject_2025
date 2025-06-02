@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
     finalProject.domain.AuthInfoDTO auth =
@@ -9,12 +9,11 @@
         out.println("세션 없음");
     }
 %>
-<%@ page session="true" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>메인 화면</title>
+    <title>주식</title>
     <style>
         html, body {
             margin: 0;
@@ -24,8 +23,8 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
-        
-        .no-style-link {
+		
+		.no-style-link {
         text-decoration: none;   /* 밑줄 제거 */
         color: inherit;          /* 부모 요소의 색상 따라감 */
 	    }
@@ -36,7 +35,7 @@
 	        text-decoration: none;
 	        color: inherit;
 	    }
-
+		
         .header {
             width: 100%;
             height: 100px;
@@ -103,53 +102,47 @@
     </style>
 </head>
 <body>
-<div class="header">
-    <div class="header-line1">
-        <div><a href="/home" class="no-style-link">로고 또는 네비게이션</a></div>
-        <div class="auth-buttons">
-    <c:choose>
-    	
-        <c:when test="${not empty sessionScope.authInfo}">
-            <c:choose>
-                <c:when test="${sessionScope.authInfo.grade == 'mem'}">
-                    <a href="/member/myPage">내 정보</a> |
-                    <a href="/logout">로그아웃</a>
-                </c:when>
-                <c:when test="${sessionScope.authInfo.grade == 'emp'}">
-                    <a href="/admin">관리하기</a> |
-                    <a href="/logout">로그아웃</a>
-                </c:when>
-            </c:choose>
-        </c:when>
-        <c:otherwise>
-            <a href="/login">로그인</a> |
-            <a href="/member/memberWrite">회원가입</a>
-        </c:otherwise>
-    </c:choose>
-</div>
-    </div>
-    <div class="header-line2">
-        <div class="nav-search-container">
-            <div class="nav-links">
-                <a href="/news">뉴스</a> |
-                <a href="/stock">인기주식</a> |
-                <a href="/community">토론장</a>
+    <div class="header">
+        <div class="header-line1">
+            <div><a href="/home" class="no-style-link">로고 또는 네비게이션</a></div>
+            <div class="auth-buttons">
+                <c:choose>
+                    <c:when test="${sessionScope.authInfo.grade == 'mem'}">
+                        <a href="/member/myPage">내 정보</a> |
+                        <a href="/logout">로그아웃</a>
+                    </c:when>
+                    <c:when test="${sessionScope.authInfo.grade == 'emp'}">
+                        <a href="/admin">관리하기</a> |
+                        <a href="/logout">로그아웃</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/login">로그인</a> |
+                        <a href="/member/memberWrite">회원가입</a>
+                    </c:otherwise>
+                </c:choose>
             </div>
-            <div class="search-box">
-                <form action="/search" method="get">
-                    <input type="text" name="query" placeholder="검색어 입력" />
-                    <button type="submit">검색</button>
-                </form>
+        </div>
+        <div class="header-line2">
+            <div class="nav-search-container">
+                <div class="nav-links">
+                    <a href="/news">뉴스</a> |
+                    <a href="/stock">인기주식</a> |
+                    <a href="/community">토론장</a>
+                </div>
+                <div class="search-box">
+                    <form action="/search" method="get">
+                        <input type="text" name="query" placeholder="검색어 입력" />
+                        <button type="submit">검색</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-
-
-<div class="main-content">
-    <h1>메인 콘텐츠 영역</h1>
-    <p>이 부분은 화면 크기에 따라 자동으로 조절됩니다.</p>
-</div>
+    <div class="main-content">
+        <h1>주식</h1>
+        <p>이 부분은 화면 크기에 따라 자동으로 조절됩니다.</p>
+        <a href="/communityWrite">글쓰기</a>
+    </div>
 </body>
 </html>
