@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="finalProject.mapper.LoginMapper">
+
+  <select id="loginSelectOne" resultType="finalProject.domain.AuthInfoDTO">
+    SELECT MEMBER_ID AS userId,
+           MEMBER_PW AS userPw,
+           MEMBER_NAME AS userName,
+           MEMBER_EMAIL AS userEmail,
+           'mem' AS grade
+    FROM MEMBER
+    WHERE MEMBER_ID = #{userId}
+
+    UNION
+
+    SELECT EMPLOYEE_ID AS userId,
+           EMPLOYEE_PW AS userPw,
+           EMPLOYEE_NAME AS userName,
+           EMPLOYEE_EMAIL AS userEmail,
+           'emp' AS grade
+    FROM EMPLOYEE
+    WHERE EMPLOYEE_ID = #{userId}
+  </select>
+
+</mapper>
