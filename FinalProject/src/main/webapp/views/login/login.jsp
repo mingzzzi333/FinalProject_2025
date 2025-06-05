@@ -89,6 +89,57 @@
             align-items: center;
             width: 100%;
         }
+        
+        .login-box {
+		    width: 400px;
+		    margin: 50px auto;
+		    padding: 30px;
+		    border: 1px solid #ccc;
+		    border-radius: 12px;
+		    background-color: #f9f9f9;
+		    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+		}
+		
+		.login-box table {
+		    width: 100%;
+		    border-collapse: collapse;
+		}
+		
+		.login-box td {
+		    padding: 10px;
+		}
+		
+		.login-box input[type="text"],
+		.login-box input[type="password"] {
+		    width: 100%;
+		    padding: 10px;
+		    font-size: 14px;
+		    margin-top: 5px;
+		    box-sizing: border-box;
+		}
+		
+		.login-box input[type="submit"] {
+		    width: 100%;
+		    padding: 10px;
+		    font-size: 15px;
+		    background-color: #5B9BD5;
+		    color: white;
+		    border: none;
+		    border-radius: 6px;
+		    cursor: pointer;
+		    margin-top: 10px;
+		}
+		
+		.login-box input[type="submit"]:hover {
+		    background-color: #45a049;
+		}
+		
+		.login-box a {
+		    text-decoration: none;
+		    color: #333;
+		    font-size: 13px;
+		}
+		        
     </style>
 </head>
 <body>
@@ -120,33 +171,38 @@
     <div class="main-content">
         <h1>메인 콘텐츠 영역</h1>
         <p>이 부분은 화면 크기에 따라 자동으로 조절됩니다.</p>
+    <div class="login-box">
     <form action="/login/loginAction" method="post">
-    <table border="1">
-        <tr>
-            <td colspan="2" align="left">
-                자동 로그인 <input type="checkbox" name="autoLogin">
-                &nbsp;|&nbsp;
-                아이디 저장
-                <input type="checkbox" name="idStore"/>
-                    <c:if test="${loginCommand.idStore}"></c:if>>
-            </td>
-        </tr>
-        <tr>
-            <td >
-                <input type="text" name="userId"  placeholder="아이디"><br/>
-                <input type="password" name="userPw" placeholder="비밀번호">
-            </td>
-            <td colspan="2"><input type="submit"  value="로그인"/></td></tr>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <a href="/help/findId">아이디</a> /
-                <a href="/help/findPassword">비밀번호 찾기</a> |
-                <a href="/member/memberWrite">회원가입</a>
-            </td>
-        </tr>
-    </table>
-</form>
+        <table>
+            <tr>
+                <td colspan="2" align="left">
+                    <label><input type="checkbox" name="autoLogin"> 자동 로그인</label>
+                    &nbsp;|&nbsp;
+                    <label><input type="checkbox" name="idStore"> 아이디 저장</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="text" name="userId" placeholder="아이디" /><br/>
+                    <input type="password" name="userPw" placeholder="비밀번호" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="로그인" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <a href="/help/findId">아이디</a> /
+                    <a href="/help/findPassword">비밀번호 찾기</a> |
+                    <a href="/member/memberWrite">회원가입</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
     </div>
 </body>
 </html>
