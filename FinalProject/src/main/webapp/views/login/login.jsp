@@ -130,9 +130,7 @@
 		    margin-top: 10px;
 		}
 		
-		.login-box input[type="submit"]:hover {
-		    background-color: #45a049;
-		}
+		
 		
 		.login-box a {
 		    text-decoration: none;

@@ -104,7 +104,7 @@
 <body>
 <div class="header">
     <div class="header-line1">
-        <div>🔧 관리자 시스템</div>
+        <div><a href="/home" class="no-style-link">로고 또는 네비게이션</a></div>
         <div class="auth-buttons">
             <a href="/logout">로그아웃</a>
         </div>
@@ -120,7 +120,7 @@
 </div>
 
 <div class="main-content">
-    <h1>관리자 메인 페이지</h1>
+    <h1>🔧관리자 메인 페이지</h1>
     <ul class="admin-menu">
         <li><a href="/admin/stock/form">📈 주식 등록 · 목록</a></li>
         <li><a href="/admin/news/form">📰 뉴스 등록</a></li>
