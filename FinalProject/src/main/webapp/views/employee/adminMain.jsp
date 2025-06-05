@@ -114,6 +114,7 @@
             <a href="/admin/stock/form">📈 주식 등록 · 목록</a> |
             <a href="/admin/news/form">📰 뉴스 등록</a> |
             <a href="/admin/company/form">🏢 기업 등록</a> |
+			<a href="/admin/communityAdmin">💬 토론장 관리</a> |
             <a href="/admin/inquiry/list">❓ 문의 답변</a>
         </div>
     </div>
@@ -125,6 +126,7 @@
         <li><a href="/admin/stock/form">📈 주식 등록 · 목록</a></li>
         <li><a href="/admin/news/form">📰 뉴스 등록</a></li>
         <li><a href="/admin/company/form">🏢 기업 등록</a></li>
+        <li><a href="/admin/communityAdmin">💬 토론장 관리</a></li>
         <li><a href="/admin/inquiry/list">❓ 문의 목록 및 답변</a></li>
     </ul>
 </div>

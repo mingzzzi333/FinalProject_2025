@@ -23,6 +23,11 @@ public class IndexController {
         return "index"; 
     }
 
+    // 관리자 로그인 성공 시 이동
+    @GetMapping("/admin")
+    public String adminMain() {
+        return "index"; 
+    }
     
     //홈으로 이동
     @GetMapping("/home")

@@ -21,13 +21,13 @@ public class EmployeeController {
     @Autowired
     EmployeeAutoNumService employeeAutoNumService;
 
+    //관리자 회원가입
     @GetMapping("/employeeWrite")
     public String write(Model model) {
         String autoNum = employeeAutoNumService.getAutoNum();
         model.addAttribute("employeeNum", autoNum);
         return "employee/employeeForm";
     }
-
     @PostMapping("/employeeWrite")
     public String write(EmployeeCommand employeeCommand) {
         employeeWriteService.execute(employeeCommand);
