@@ -116,7 +116,7 @@
                     <a href="/logout">로그아웃</a>
                 </c:when>
                 <c:when test="${sessionScope.authInfo.grade == 'emp'}">
-                    <a href="/admin">관리하기</a> |
+                    <a href="/adminMain">관리하기</a> |
                     <a href="/logout">로그아웃</a>
                 </c:when>
             </c:choose>

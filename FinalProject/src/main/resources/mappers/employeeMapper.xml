@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="finalProject.mapper.EmployeeMapper">
+
+  <select id="getLastEmployeeNum" resultType="String">
+    SELECT MAX(EMPLOYEE_NUM) FROM EMPLOYEE
+  </select>
+
+  <insert id="insertEmployee" parameterType="finalProject.domain.EmployeeDTO">
+  INSERT INTO EMPLOYEE (
+    EMPLOYEE_NUM, EMPLOYEE_ID, EMPLOYEE_PW, EMPLOYEE_NAME,
+    EMPLOYEE_PHONE, EMPLOYEE_EMAIL, EMPLOYEE_ADDR, EMPLOYEE_POST,
+    EMPLOYEE_HIRE_DATE, EMPLOYEE_IMG
+  )
+  VALUES (
+    #{employeeNum}, #{employeeId}, #{employeePw}, #{employeeName},
+    #{employeePhone}, #{employeeEmail}, #{employeeAddr}, #{employeePost},
+    #{employeeHireDate}, #{employeeImg}
+  )
+</insert>
+
+
+</mapper>

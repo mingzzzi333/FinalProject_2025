@@ -20,14 +20,15 @@ public class IndexController {
     // 일반 회원 로그인 성공 시 이동
     @GetMapping("/index")
     public String userMain() {
-        return "index"; // => /WEB-INF/views/index.jsp
+        return "index"; 
     }
 
     // 관리자 로그인 성공 시 이동
     @GetMapping("/admin")
     public String adminMain() {
-        return "adminMain"; // => /WEB-INF/views/adminMain.jsp
+        return "index"; 
     }
+    
 	
     //홈으로 이동
     @GetMapping("/home")

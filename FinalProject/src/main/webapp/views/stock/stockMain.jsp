@@ -142,7 +142,7 @@
     <div class="main-content">
         <h1>주식</h1>
         <p>이 부분은 화면 크기에 따라 자동으로 조절됩니다.</p>
-        <a href="/communityWrite">글쓰기</a>
+        <a href="/company">기업1</a>
     </div>
 </body>
 </html>
