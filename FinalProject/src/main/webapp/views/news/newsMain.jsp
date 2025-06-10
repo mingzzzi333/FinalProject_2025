@@ -25,16 +25,16 @@
         }
         
         .no-style-link {
-        text-decoration: none;   /* 밑줄 제거 */
-        color: inherit;          /* 부모 요소의 색상 따라감 */
-	    }
-	
-	    .no-style-link:hover,
-	    .no-style-link:visited,
-	    .no-style-link:active {
-	        text-decoration: none;
-	        color: inherit;
-	    }
+            text-decoration: none;   /* 밑줄 제거 */
+            color: inherit;          /* 부모 요소의 색상 따라감 */
+        }
+    
+        .no-style-link:hover,
+        .no-style-link:visited,
+        .no-style-link:active {
+            text-decoration: none;
+            color: inherit;
+        }
 
         .header {
             width: 100%;
@@ -140,9 +140,25 @@
     </div>
 
     <div class="main-content">
-        <h1>뉴스</h1>
-        <p>이 부분은 화면 크기에 따라 자동으로 조절됩니다.</p>
-        <a href="/communityWrite">글쓰기</a>
+        <h1>경제 뉴스</h1>
+
+        <c:choose>
+            <c:when test="${not empty newsList}">
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <c:forEach var="news" items="${newsList}">
+                        <div style="display: flex; gap: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                            <img src="${news.imageUrl}" alt="뉴스 이미지" style="width: 120px; height: 90px; object-fit: cover;" />
+                            <div>
+                                <h3><a href="${news.link}" target="_blank" style="color: black; text-decoration: none;">${news.title}</a></h3>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <p>뉴스 데이터를 불러올 수 없습니다.</p>
+            </c:otherwise>
+        </c:choose>
     </div>
 </body>
 </html>
