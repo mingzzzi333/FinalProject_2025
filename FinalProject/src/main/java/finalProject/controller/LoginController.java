@@ -26,7 +26,7 @@ public class LoginController {
             if ("mem".equals(authInfo.getGrade())) {
                 return "redirect:/index"; // 일반 회원
             } else if ("emp".equals(authInfo.getGrade())) {
-                return "redirect:/admin"; // 관리자
+               return "redirect:/index"; // + authInfo.getUserNum(); // 관리자
             }
         }
         return "login/login"; // 로그인 실패

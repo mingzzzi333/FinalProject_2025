@@ -10,4 +10,8 @@ public interface MemberMapper {
 	public void insertMember(MemberDTO dto);
 
     public String memberNumAutoSelect();
+    
+    public MemberDTO memSelectOne(String memberNum);
+
+
 }

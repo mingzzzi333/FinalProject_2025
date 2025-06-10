@@ -114,15 +114,14 @@
             <a href="/admin/stock/form">📈 주식 등록 · 목록</a> |
             <a href="/admin/news/form">📰 뉴스 등록</a> |
             <a href="/admin/company/form">🏢 기업 등록</a> |
-			<a href="/admin/communityAdmin">💬 토론장 관리</a> |
+            <a href="/admin/communityAdmin/${empNum}">💬 토론장 관리</a> |
             <a href="/admin/inquiry/list">❓ 문의 답변</a>
         </div>
     </div>
 </div>
 
 <div class="main-content">
-    <h1>🔧</h1>
-    
+    <h1>🔧 관리자 번호: ${empNum}</h1>
 </div>
 </body>
 </html>

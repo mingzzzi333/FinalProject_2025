@@ -24,18 +24,18 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
-        
+
         .no-style-link {
-        text-decoration: none;   /* 밑줄 제거 */
-        color: inherit;          /* 부모 요소의 색상 따라감 */
-	    }
-	
-	    .no-style-link:hover,
-	    .no-style-link:visited,
-	    .no-style-link:active {
-	        text-decoration: none;
-	        color: inherit;
-	    }
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .no-style-link:hover,
+        .no-style-link:visited,
+        .no-style-link:active {
+            text-decoration: none;
+            color: inherit;
+        }
 
         .header {
             width: 100%;
@@ -100,6 +100,46 @@
             align-items: center;
             width: 100%;
         }
+
+        /* 슬라이딩 패널 및 오버레이 */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 998;
+        }
+
+        .slide-panel {
+            width: 20%;
+            height: 100%;
+            background-color: #fff;
+            position: fixed;
+            top: 0;
+            right: -50%;
+            transition: right 0.3s ease-in-out;
+            z-index: 999;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .slide-panel.open {
+            right: 0;
+        }
+
+        .slide-panel-content {
+            padding: 30px;
+            position: relative;
+            font-size: 16px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 26px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -107,26 +147,25 @@
     <div class="header-line1">
         <div><a href="/home" class="no-style-link">로고 또는 네비게이션</a></div>
         <div class="auth-buttons">
-    <c:choose>
-    	
-        <c:when test="${not empty sessionScope.authInfo}">
             <c:choose>
-                <c:when test="${sessionScope.authInfo.grade == 'mem'}">
-                    <a href="/member/myPage">내 정보</a> |
-                    <a href="/logout">로그아웃</a>
+                <c:when test="${not empty sessionScope.authInfo}">
+                    <c:choose>
+                        <c:when test="${sessionScope.authInfo.grade == 'mem'}">
+                            <a href="#" onclick="openMyPage()">내 정보</a> |
+                            <a href="/logout">로그아웃</a>
+                        </c:when>
+                        <c:when test="${sessionScope.authInfo.grade == 'emp'}">
+                            <a href="/adminMain">관리하기</a> |
+                            <a href="/logout">로그아웃</a>
+                        </c:when>
+                    </c:choose>
                 </c:when>
-                <c:when test="${sessionScope.authInfo.grade == 'emp'}">
-                    <a href="/adminMain">관리하기</a> |
-                    <a href="/logout">로그아웃</a>
-                </c:when>
+                <c:otherwise>
+                    <a href="/login">로그인</a> |
+                    <a href="/member/memberWrite">회원가입</a>
+                </c:otherwise>
             </c:choose>
-        </c:when>
-        <c:otherwise>
-            <a href="/login">로그인</a> |
-            <a href="/member/memberWrite">회원가입</a>
-        </c:otherwise>
-    </c:choose>
-</div>
+        </div>
     </div>
     <div class="header-line2">
         <div class="nav-search-container">
@@ -145,11 +184,39 @@
     </div>
 </div>
 
-
-
 <div class="main-content">
     <h1>메인 콘텐츠 영역</h1>
     <p>이 부분은 화면 크기에 따라 자동으로 조절됩니다.</p>
 </div>
+
+<!-- 오버레이 -->
+<div id="overlay" class="overlay" onclick="closeMyPage()"></div>
+
+<!-- 오른쪽 슬라이딩 패널 -->
+<div id="myPagePanel" class="slide-panel">
+    <div class="slide-panel-content">
+        <span class="close-btn" onclick="closeMyPage()">×</span>
+        <h2>👤 내 정보</h2>
+		<ul style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
+		    <li><a href="/myPage">회원정보</a></li>
+		    <li><a href="/myAsset">내 자산</a></li>
+		    <li><a href="/myStoke">보유종목</a></li>
+		    <li><a href="/wish">관심종목</a></li>
+		    <li><a href="/inquiry">문의하기</a></li>
+		</ul>
+    </div>
+</div>
+
+<script>
+function openMyPage() {
+    document.getElementById("myPagePanel").classList.add("open");
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeMyPage() {
+    document.getElementById("myPagePanel").classList.remove("open");
+    document.getElementById("overlay").style.display = "none";
+}
+</script>
 </body>
 </html>

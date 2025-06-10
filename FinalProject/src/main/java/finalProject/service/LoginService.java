@@ -13,6 +13,10 @@ public class LoginService {
     LoginMapper loginMapper;
 
     public AuthInfoDTO execute(LoginCommand loginCommand) {
-        return loginMapper.loginSelectOne(loginCommand.getUserId());
+        AuthInfoDTO authInfo = loginMapper.loginSelectOne(loginCommand.getUserId());
+        System.out.println("DEBUG userId: " + authInfo.getUserId());
+        System.out.println("DEBUG userNum: " + authInfo.getUserNum()); // ← 이게 null이면 문제!
+        return authInfo;
     }
+
 }

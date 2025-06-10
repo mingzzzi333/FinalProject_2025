@@ -21,4 +21,14 @@
     <select id="memberNumAutoSelect" resultType="String">
     	SELECT CONCAT('mem_', NVL(SUBSTR(MAX(MEMBER_NUM), 5), '100000') + 1) FROM member
 	</select>
+	
+	<!-- 상세보기 -->
+	<select id="memSelectOne" parameterType="String" resultType="finalProject.domain.MemberDTO">
+    SELECT MEMBER_NUM, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, MEMBER_EMAIL,
+           MEMBER_BIRTH, MEMBER_GENDER, MEMBER_ADDR, MEMBER_DETAIL_ADDR,
+           MEMBER_POST, MEMBER_IMG
+    FROM MEMBER
+    WHERE MEMBER_NUM = #{memberNum}
+</select>
+
 </mapper>

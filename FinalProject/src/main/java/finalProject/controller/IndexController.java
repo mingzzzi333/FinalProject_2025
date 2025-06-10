@@ -42,15 +42,15 @@ public class IndexController {
 	}
 	
 	//뉴스로 이동
-	@GetMapping("/news")
-	public String newsPage() {
-		 return "news/newsMain";
-	}
+	 @GetMapping("/news")
+	 public String newsRedirect() {
+	    return "redirect:/news/crawled";
+	 }
 	
 	//주식정보로 이동
 	@GetMapping("/stock")
 	public String stockPage() {
 		return "stock/stockMain";
 	}	
-		
+	
 }

@@ -12,8 +12,5 @@ public class AdminController {
         return "employee/adminMain";
     }
     
-    @GetMapping("/admin/communityAdmin")
-    public String communityAdmin() {
-        return "community/communityAdmin";
-    }
+   
 }

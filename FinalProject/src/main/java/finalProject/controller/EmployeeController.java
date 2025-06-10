@@ -28,6 +28,7 @@ public class EmployeeController {
         model.addAttribute("employeeNum", autoNum);
         return "employee/employeeForm";
     }
+    
     @PostMapping("/employeeWrite")
     public String write(EmployeeCommand employeeCommand) {
         employeeWriteService.execute(employeeCommand);

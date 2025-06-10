@@ -9,7 +9,8 @@
            MEMBER_PW AS userPw,
            MEMBER_NAME AS userName,
            MEMBER_EMAIL AS userEmail,
-           'mem' AS grade
+           'mem' AS grade,
+           MEMBER_NUM AS userNum       <!-- 회원 번호 추가 -->
     FROM MEMBER
     WHERE MEMBER_ID = #{userId}
 
@@ -19,9 +20,11 @@
            EMPLOYEE_PW AS userPw,
            EMPLOYEE_NAME AS userName,
            EMPLOYEE_EMAIL AS userEmail,
-           'emp' AS grade
+           'emp' AS grade,
+           EMPLOYEE_NUM AS userNum     <!-- 직원 번호 추가 -->
     FROM EMPLOYEE
     WHERE EMPLOYEE_ID = #{userId}
-  </select>
+</select>
+
 
 </mapper>
