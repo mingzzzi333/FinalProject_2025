@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="finalProject.mapper.BoardMapper">
+
+<insert id="insertBoard" parameterType="finalProject.domain.BoardDTO">
+    INSERT INTO board (
+      board_num,board_title, employee_num
+    )
+    VALUES (
+      #{boardNum},#{boardTitle},#{employeeNum}
+    )
+  </insert>
+  
+  <select id="boardNumAutoSelect" resultType="int">
+    	SELECT NVL(MAX(board_num), 0) + 1 FROM board
+	</select>
+	
+	<select id="selectBoardsList" parameterType="String" resultType="finalProject.domain.BoardDTO">
+    SELECT board_num, board_title
+    FROM board
+    WHERE employee_num = #{empNum}
+    ORDER BY board_num
+</select>
+</mapper>

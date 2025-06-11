@@ -10,6 +10,8 @@
     }
 %>
 <%@ page session="true" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -140,6 +142,99 @@
             font-size: 26px;
             cursor: pointer;
         }
+        
+        
+        /* 추가한곳 */
+        .news-item img {
+           border-radius: 10px;
+           transition: transform 0.3s ease; /* 살짝 애니메이션도 넣어봄 */
+       }
+   
+       .news-item img:hover {
+           transform: scale(1.2); /* 마우스 올리면 살짝 커지게 */
+       }
+      .news-slider-container {
+          display: flex;
+          align-items: center;
+          position: relative;
+      }
+      
+      .slider-btn {
+          background: #ddd;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          padding: 10px;
+          user-select: none;
+      }
+      
+      .news-slider {
+          display: flex;
+          overflow: hidden;
+          scroll-behavior: smooth;
+          width: 80%;
+          margin: 0 15px;
+      }
+      
+      .news-item {
+          flex: 0 0 auto;
+          width: 180px; /* 조절가능 */
+          margin-right: 10px;
+          cursor: pointer;
+          text-align: center;
+      }
+      
+      .news-item img {
+          width: 100%;
+          height: 100px;
+          object-fit: cover;
+      }
+      
+      .news-title {
+          margin-top: 5px;
+          font-size: 14px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
+      .rounded-button {
+          background-color: #ff69b4; /* 버튼 색 */
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 25px; /* 둥근 모서리 */
+          cursor: pointer;
+          font-size: 16px;
+          transition: background-color 0.3s ease;
+      }
+      
+      .rounded-button:hover {
+          background-color: #800080;   /* 마우스 올렸을때 */
+      }
+      
+      /* 더보기 버튼 */
+      .more-button {
+          background-color: #800080; /* 보라색 */
+          color: white;
+          border: none;
+          border-radius: 15px;
+          padding: 6px 15px;
+          font-size: 12px;
+          cursor: pointer;
+          margin-top: 10px;  /* 슬라이더 버튼 아래 간격 */
+          transition: background-color 0.3s ease;
+          align-self: center; /* 가운데 정렬 */
+          box-shadow: 0 2px 5px rgba(128, 0, 128, 0.5);
+      }
+      
+      .more-button:hover {
+          background-color: #5a005a;
+      }
+      
+      .news-item {
+          min-height: 10px; /* 제목 + 날짜 감안 */
+      }
+      
     </style>
 </head>
 <body>
@@ -186,7 +281,31 @@
 
 <div class="main-content">
     <h1>메인 콘텐츠 영역</h1>
-    <p>이 부분은 화면 크기에 따라 자동으로 조절됩니다.</p>
+    
+    <div class="news-slider-container">
+        <button id="prevBtn" class="rounded-button">&lt;</button>
+        <div class="news-slider">
+            <c:forEach var="news" items="${newsList}">
+                <div class="news-item" onclick="window.open('${news.link}', '_blank')">
+                    <img src="${news.imageUrl}" alt="뉴스 이미지" />
+                    <p class="news-title" title="${news.title}">
+                   <c:choose>
+                       <c:when test="${fn:length(news.title) > 15}">
+                           ${fn:substring(news.title, 0, 15)}...
+                       </c:when>
+                       <c:otherwise>
+                           ${news.title}
+                       </c:otherwise>
+                   </c:choose>
+               </p>
+               <p style="font-size: 12px; color: #999; margin: 2px 0 0 0;">작성일: ${news.pubDate}</p>
+                </div>
+            </c:forEach>
+        </div>
+        <button id="nextBtn" class="rounded-button">&gt;</button>
+        <!-- 더보기 버튼 -->
+        <button id="moreBtn" class="more-button">뉴스 더보기</button>
+    </div>
 </div>
 
 <!-- 오버레이 -->
@@ -197,13 +316,13 @@
     <div class="slide-panel-content">
         <span class="close-btn" onclick="closeMyPage()">×</span>
         <h2>👤 내 정보</h2>
-		<ul style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
-		    <li><a href="/myPage">회원정보</a></li>
-		    <li><a href="/myAsset">내 자산</a></li>
-		    <li><a href="/myStoke">보유종목</a></li>
-		    <li><a href="/wish">관심종목</a></li>
-		    <li><a href="/inquiry">문의하기</a></li>
-		</ul>
+      <ul style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
+          <li><a href="/myPage">회원정보</a></li>
+          <li><a href="/myAsset">내 자산</a></li>
+          <li><a href="/myStoke">보유종목</a></li>
+          <li><a href="/wish">관심종목</a></li>
+          <li><a href="/inquiry">문의하기</a></li>
+      </ul>
     </div>
 </div>
 
@@ -217,6 +336,27 @@ function closeMyPage() {
     document.getElementById("myPagePanel").classList.remove("open");
     document.getElementById("overlay").style.display = "none";
 }
+
+</script>
+<script>
+const slider = document.querySelector('.news-slider');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+const scrollAmount = 190; // news-item width + margin
+
+prevBtn.addEventListener('click', () => {
+    slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+});
+
+nextBtn.addEventListener('click', () => {
+    slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+});
+
+/* 뉴스 더보기 버튼 */
+document.getElementById("moreBtn").addEventListener("click", function() {
+    window.location.href = "/news/crawled";
+});
 </script>
 </body>
 </html>

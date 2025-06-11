@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
     finalProject.domain.AuthInfoDTO auth =
         (finalProject.domain.AuthInfoDTO) session.getAttribute("authInfo");
@@ -114,7 +115,7 @@
             <a href="/admin/stock/form">📈 주식 등록 · 목록</a> |
             <a href="/admin/news/form">📰 뉴스 등록</a> |
             <a href="/admin/company/form">🏢 기업 등록</a> |
-            <a href="/admin/communityAdmin/${empNum}">💬 토론장 관리</a> |
+            <a href="/admin/communityAdmin/${sessionScope.authInfo.userNum}">💬 토론장 관리</a> |
             <a href="/admin/inquiry/list">❓ 문의 답변</a>
         </div>
     </div>
@@ -122,6 +123,21 @@
 
 <div class="main-content">
     <h1>🔧 관리자 번호: ${empNum}</h1>
+    <a href="/admin/boardWrite?empNum=${sessionScope.authInfo.userNum}">게시판 생성</a>
+    <div class="sidebar">
+	    <h3>📂 내가 만든 게시판</h3>
+	    <h3>게시판 개수: ${fn:length(boardList)}</h3>
+	    <ul class="board-list">
+	        <c:forEach var="board" items="${boardList}">
+			    <li>
+			        <a href="/community/list?boardNum=${board.boardNum}">
+			            ${board.boardTitle}
+			        </a>
+			    </li>
+			</c:forEach>
+	    </ul>
+	</div>
 </div>
+	
 </body>
 </html>

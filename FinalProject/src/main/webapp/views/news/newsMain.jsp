@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
     finalProject.domain.AuthInfoDTO auth =
         (finalProject.domain.AuthInfoDTO) session.getAttribute("authInfo");
@@ -99,6 +100,77 @@
             align-items: center;
             width: 100%;
         }
+        
+        /* 페이지 네비게이션 스타일 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .page-link {
+            padding: 6px 12px;
+            border-radius: 10px;
+            background-color: #f1f1f1;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .page-link:hover {
+            background-color: #800080; /* 보라색 */
+            color: #fff;
+        }
+        
+        /* 뉴스 항목 스타일 */
+        .news-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 5px;
+            margin-bottom: 8px;
+            background-color: #fafafa;
+        }
+        .news-index {
+            width: 24px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: #666;
+        }
+        .news-image {
+            width: 70px;
+            height: 52px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+        .news-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .news-title {
+            font-size: 14px;
+            margin: 0;
+        }
+        .news-title a {
+            color: black;
+            text-decoration: none;
+        }
+        .news-title a:hover {
+            text-decoration: underline;
+        }
+        .news-date {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
+        }
     </style>
 </head>
 <body>
@@ -141,15 +213,33 @@
 
     <div class="main-content">
         <h1>경제 뉴스</h1>
+        <div style="margin-bottom: 15px; font-weight: bold; font-size: 16px; color: #555;">
+            현재 페이지: ${currentPage} / 전체 페이지: ${totalPages}
+        </div>
 
         <c:choose>
             <c:when test="${not empty newsList}">
                 <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <c:forEach var="news" items="${newsList}">
-                        <div style="display: flex; gap: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-                            <img src="${news.imageUrl}" alt="뉴스 이미지" style="width: 120px; height: 90px; object-fit: cover;" />
-                            <div>
-                                <h3><a href="${news.link}" target="_blank" style="color: black; text-decoration: none;">${news.title}</a></h3>
+                    <c:forEach var="news" items="${newsList}" varStatus="status">
+                        <div class="news-item" onclick="window.open('${news.link}', '_blank')" style="cursor: pointer;">
+                            <div class="news-index">
+                                ${ (currentPage - 1) * pageSize + status.index + 1 }
+                            </div>
+                            <img class="news-image" src="${news.imageUrl}" alt="뉴스 이미지" />
+                            <div class="news-content">
+                                <h3 class="news-title" title="${news.title}">
+                                    <c:choose>
+                                        <c:when test="${fn:length(news.title) > 40}">
+                                            ${fn:substring(news.title, 0, 40)}...
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${news.title}
+                                        </c:otherwise>
+                                    </c:choose>
+                                </h3>
+                                <div>
+                            <p style="font-size: 12px; color: #999;">작성일: ${news.pubDate}</p>
+                        </div>
                             </div>
                         </div>
                     </c:forEach>
@@ -159,6 +249,25 @@
                 <p>뉴스 데이터를 불러올 수 없습니다.</p>
             </c:otherwise>
         </c:choose>
+
+        <!-- 페이지 네비게이션 바 -->
+        <div class="pagination">
+            <c:if test="${currentPage > 1}">
+                <a href="/news/crawled?page=${currentPage - 1}" class="page-link">이전</a>
+            </c:if>
+
+            <c:forEach begin="1" end="${totalPages}" var="i">
+                <a href="/news/crawled?page=${i}" class="page-link"
+                   style="${i == currentPage ? 'background-color: #800080; color: white; font-weight: bold;' : ''}">
+                   ${i}
+                </a>
+            </c:forEach>
+
+            <c:if test="${currentPage < totalPages}">
+                <a href="/news/crawled?page=${currentPage + 1}" class="page-link">다음</a>
+            </c:if>
+        </div>
+
     </div>
 </body>
 </html>

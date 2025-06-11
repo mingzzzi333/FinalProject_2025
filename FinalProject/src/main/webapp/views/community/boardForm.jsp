@@ -121,14 +121,14 @@
 </div>
 
 <div class="main-content">
-    <h1>🔧관리자 메인 페이지</h1>
-    <ul class="admin-menu">
-        <li><a href="/admin/stock/form">📈 주식 등록 · 목록</a></li>
-        <li><a href="/admin/news/form">📰 뉴스 등록</a></li>
-        <li><a href="/admin/company/form">🏢 기업 등록</a></li>
-        <li><a href="/admin/communityAdmin?empNum=${sessionScope.authInfo.userNum}">💬 토론장 관리</a></li>
-        <li><a href="/admin/inquiry/list">❓ 문의 목록 및 답변</a></li>
-    </ul>
+    <h1>🔧 관리자 번호: ${empNum}</h1>
+    <form action="/boardWrite" method="post">
+	    <input type="hidden" name="empNum" value="${sessionScope.authInfo.userNum}" />
+	    <input type="text" name="boardTitle" placeholder="게시판 이름 입력" required />
+	    <input type="submit" value="게시판 추가하기"/>
+	</form>
+	
 </div>
 </body>
 </html>
+
