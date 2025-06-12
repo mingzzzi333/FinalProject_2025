@@ -13,5 +13,7 @@ public interface BoardMapper {
 	public int boardNumAutoSelect();
 	
 	public List<BoardDTO> selectBoardsList(String empNum);
+	
+	List<BoardDTO> selectAllBoards();
 
 }

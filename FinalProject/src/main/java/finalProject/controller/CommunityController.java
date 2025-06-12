@@ -23,7 +23,6 @@ public class CommunityController {
 	}
 	
 	//게시글등록
-	
 	@PostMapping("/communityInsert")
 	public String write(@Valid CommunityCommand communityCommand,
 	                    BindingResult result,

@@ -56,16 +56,26 @@
             padding: 20px;
         }
 
+        .search-form button:hover {
+		    background-color: #3e78c2;
+		}
+
         .search-box input[type="text"] {
-        	width: 800px;     /* 입력창 너비 */
-        	height: 30px;     /* 입력창 높이 */
-            padding: 5px;
+        	border : 1px;
+        	border-radius: 20px 0 0 20px;
+        	margin-top: 16px;
+            width: 600px;
+            height: 40px;
+            padding: 10px;
             font-size: 14px;
         }
 
         .search-box button {
-        	width: 100px;     /* 입력창 너비 */
-        	height: 40px;     /* 입력창 높이 */
+        	border : 1px;
+        	border-radius: 0 20px 20px 0;
+        	margin-top: 15px;
+            width: 100px;
+            height: 40px;
             padding: 5px 10px;
             font-size: 14px;
             cursor: pointer;
@@ -77,6 +87,7 @@
             align-items: center;
             width: 100%;
         }
+        
     </style>
 </head>
 <body>
@@ -93,7 +104,7 @@
                 <div class="nav-links">
                     <a href="/news">뉴스</a> |
                     <a href="/stock">인기주식</a> |
-                    <a href="/community">토론장</a>
+                    <a href="/communityMain">토론장</a>
                 </div>
                 <div class="search-box">
                     <form action="/search" method="get">

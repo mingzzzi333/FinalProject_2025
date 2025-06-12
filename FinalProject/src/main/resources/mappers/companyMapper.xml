@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="finalProject.mapper.CompanyMapper">
+
+    <insert id="insertCompanyInfo" parameterType="finalProject.domain.CompanyDTO">
+        INSERT INTO COMPANY (
+            COMPANY_NUM, COMPANY_NAME, COMPANY_TYPE, COMPANY_CEO_NAME,
+            COMPANY_YEAR, COMPANY_LIST_DATE, COMPANY_TOTAL_SHARES,
+            COMPANY_CONTENT, COMPANY_MARKET_CAP, EMPLOYEE_NUM,
+            ESTABLISH_DATE, INDUSTRY
+        ) VALUES (
+            #{companyNum}, #{companyName}, #{companyType}, #{companyCeoName},
+            #{companyYear, jdbcType=DATE},
+            #{companyListDate, jdbcType=DATE},
+            #{companyTotalShares, jdbcType=INTEGER},
+            #{companyContent, jdbcType=VARCHAR},
+            #{companyMarketCap, jdbcType=NUMERIC},
+            #{employeeNum, jdbcType=VARCHAR},
+            #{establishDate, jdbcType=VARCHAR},
+            #{industry, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectAllCompanies" resultType="finalProject.domain.CompanyDTO">
+        SELECT * FROM COMPANY ORDER BY COMPANY_NAME
+    </select>
+
+    <select id="selectByCompanyName" resultType="finalProject.domain.CompanyDTO" parameterType="string">
+        SELECT * FROM COMPANY
+        WHERE COMPANY_NAME LIKE '%' || #{keyword} || '%'
+        ORDER BY COMPANY_NAME
+    </select>
+
+    <select id="existsByCompanyName" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM COMPANY WHERE COMPANY_NAME = #{companyName}
+    </select>
+
+    <select id="selectPaged" resultType="finalProject.domain.CompanyDTO">
+        SELECT * FROM COMPANY
+        ORDER BY COMPANY_NAME
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <select id="searchByCompanyNamePaged" resultType="finalProject.domain.CompanyDTO">
+        SELECT * FROM COMPANY
+        WHERE COMPANY_NAME LIKE '%' || #{keyword} || '%'
+        ORDER BY COMPANY_NAME
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM COMPANY
+    </select>
+
+    <select id="countByCompanyName" resultType="int">
+        SELECT COUNT(*) FROM COMPANY
+        WHERE COMPANY_NAME LIKE '%' || #{keyword} || '%'
+    </select>
+    
+    <select id="selectByCompanyNum" resultType="finalProject.domain.CompanyDTO">
+    SELECT * FROM COMPANY WHERE COMPANY_NUM = #{companyNum}
+   </select>
+    
+
+</mapper>

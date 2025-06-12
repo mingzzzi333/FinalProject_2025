@@ -183,7 +183,7 @@
             <div class="nav-links">
                 <a href="/news">뉴스</a> |
                 <a href="/stock">인기주식</a> |
-                <a href="/community">토론장</a>
+                <a href="/communityMain">토론장</a>
             </div>
             <div class="search-box">
                 <form action="/search" method="get">

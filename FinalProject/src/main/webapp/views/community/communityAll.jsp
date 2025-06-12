@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
     finalProject.domain.AuthInfoDTO auth =
         (finalProject.domain.AuthInfoDTO) session.getAttribute("authInfo");
@@ -183,7 +184,7 @@
             <div class="nav-links">
                 <a href="/news">뉴스</a> |
                 <a href="/stock">인기주식</a> |
-                <a href="/community">토론장</a>
+                <a href="/communityMain">토론장</a>
             </div>
             <div class="search-box">
                 <form action="/search" method="get">
@@ -197,8 +198,19 @@
 
 <div class="main-content">
     <h1>커뮤</h1>
-    <p>이 부분은 화면 크기에 따라 자동으로 조절됩니다.</p>
     <a href="/communityWrite">글쓰기</a>
+    <div class="sidebar">
+	    <h3>📂게시판 개수: ${fn:length(boardList)}</h3>
+	    <ul class="board-list">
+	        <c:forEach var="board" items="${boardList}">
+			    <li>
+			        <a href="/community/list?boardNum=${board.boardNum}">
+			            ${board.boardTitle}
+			        </a>
+			    </li>
+			</c:forEach>
+	    </ul>
+	</div>
 </div>
 
 <!-- 오버레이 -->

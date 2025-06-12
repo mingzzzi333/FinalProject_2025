@@ -1,9 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%
+    finalProject.domain.AuthInfoDTO auth =
+        (finalProject.domain.AuthInfoDTO) session.getAttribute("authInfo");
+    if (auth != null) {
+        out.println("세션 있음 → 아이디: " + auth.getUserId() + ", 등급: " + auth.getGrade());
+    } else {
+        out.println("세션 없음");
+    }
+%>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>메인 화면</title>
+    <title>뉴스</title>
     <style>
         html, body {
             margin: 0;
@@ -15,16 +24,16 @@
         }
         
         .no-style-link {
-        text-decoration: none;   /* 밑줄 제거 */
-        color: inherit;          /* 부모 요소의 색상 따라감 */
-	    }
-	
-	    .no-style-link:hover,
-	    .no-style-link:visited,
-	    .no-style-link:active {
-	        text-decoration: none;
-	        color: inherit;
-	    }
+            text-decoration: none;   /* 밑줄 제거 */
+            color: inherit;          /* 부모 요소의 색상 따라감 */
+        }
+    
+        .no-style-link:hover,
+        .no-style-link:visited,
+        .no-style-link:active {
+            text-decoration: none;
+            color: inherit;
+        }
 
         .header {
             width: 100%;
@@ -68,16 +77,26 @@
             padding: 20px;
         }
 
+        .search-form button:hover {
+		    background-color: #3e78c2;
+		}
+
         .search-box input[type="text"] {
-        	width: 800px;     /* 입력창 너비 */
-        	height: 30px;     /* 입력창 높이 */
-            padding: 5px;
+        	border : 1px;
+        	border-radius: 20px 0 0 20px;
+        	margin-top: 16px;
+            width: 600px;
+            height: 40px;
+            padding: 10px;
             font-size: 14px;
         }
 
         .search-box button {
-        	width: 100px;     /* 입력창 너비 */
-        	height: 40px;     /* 입력창 높이 */
+        	border : 1px;
+        	border-radius: 0 20px 20px 0;
+        	margin-top: 15px;
+            width: 100px;
+            height: 40px;
             padding: 5px 10px;
             font-size: 14px;
             cursor: pointer;
@@ -154,14 +173,14 @@
                 <div class="nav-links">
                     <a href="/news">뉴스</a> |
                     <a href="/stock">인기주식</a> |
-                    <a href="/community">토론장</a>
+                    <a href="/communityMain">토론장</a>
                 </div>
                 <div class="search-box">
-                    <form action="/search" method="get">
-                        <input type="text" name="query" placeholder="검색어 입력" />
-                        <button type="submit">검색</button>
-                    </form>
-                </div>
+                <form action="/search" method="get">
+                    <input type="text" name="query" placeholder="검색어 입력" />
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
             </div>
         </div>
     </div>

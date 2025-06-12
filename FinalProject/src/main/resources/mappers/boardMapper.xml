@@ -23,4 +23,8 @@
     WHERE employee_num = #{empNum}
     ORDER BY board_num
 </select>
+
+<select id="selectAllBoards" resultType="BoardDTO">
+    SELECT * FROM BOARD
+</select>
 </mapper>

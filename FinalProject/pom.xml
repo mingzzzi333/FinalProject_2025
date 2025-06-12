@@ -81,11 +81,12 @@
       <version>1.16</version>
     </dependency>
 
-    <!-- Lombok -->
+    <!-- ✅ Lombok 수정 -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <optional>true</optional>
+      <version>1.18.30</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Email -->
@@ -106,6 +107,18 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- JSON 파싱용 추가 -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20240303</version>
+    </dependency>
+    <dependency>
+    <groupId>org.jsoup</groupId>
+    <artifactId>jsoup</artifactId>
+    <version>1.15.4</version> <!-- 최신 버전 사용 가능 -->
+</dependency>
+
     <dependency>
       <groupId>org.mybatis.spring.boot</groupId>
       <artifactId>mybatis-spring-boot-starter-test</artifactId>
@@ -117,14 +130,20 @@
       <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
     </dependency>
-    
-    <dependency>
-    <groupId>org.jsoup</groupId>
-    <artifactId>jsoup</artifactId>
-    <version>1.17.2</version> <!-- 또는 최신 버전 -->
-</dependency>
-    
-    
+<!-- Spring Boot 3.x 이상에서는 jakarta.servlet 필요 -->
+   <dependency>
+        <groupId>jakarta.servlet</groupId>
+        <artifactId>jakarta.servlet-api</artifactId>
+        <version>6.0.0</version>
+        <scope>provided</scope>
+      </dependency>
+      
+      <dependency>
+          <groupId>com.opencsv</groupId>
+          <artifactId>opencsv</artifactId>
+             <version>5.9</version>
+      </dependency>
+
   </dependencies>
 
   <build>
