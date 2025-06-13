@@ -277,7 +277,6 @@
                 <a href="/news/crawled?page=${currentPage + 1}" class="page-link">다음</a>
             </c:if>
         </div>
-
     </div>
 </body>
 </html>

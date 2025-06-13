@@ -31,6 +31,14 @@ public class AdminController {
         return "employee/adminMain";
     }
     
+  //뉴스 관리 페이지
+    @GetMapping("/admin/newsAdmin")
+    public String commuManager() {
+	    return "news/newsAdmin";
+    }
+    
+    
+    
     
     //커뮤니티 관리 페이지
     @GetMapping("/admin/communityAdmin")
@@ -49,7 +57,6 @@ public class AdminController {
         return "community/communityAdmin";
     }
 
-    
     //게시판 생성 + 자동부여
     @GetMapping("/admin/boardWrite")
     public String boardWrite(Model model) {

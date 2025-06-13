@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
     finalProject.domain.AuthInfoDTO auth =
         (finalProject.domain.AuthInfoDTO) session.getAttribute("authInfo");
@@ -112,23 +113,19 @@
     <div class="header-line2">
         <div class="nav-links">
             <a href="/admin/stock/form">📈 주식 등록 · 목록</a> |
-            <a href="/admin/newsAdmin">📰 뉴스 등록</a> |
+            <a href="/admin/news/form">📰 뉴스 등록</a> |
             <a href="/admin/company/form">🏢 기업 등록</a> |
-			<a href="/admin/communityAdmin?empNum=${sessionScope.authInfo.userNum}">💬 토론장 관리</a> |
+            <a href="/admin/communityAdmin/${sessionScope.authInfo.userNum}">💬 토론장 관리</a> |
             <a href="/admin/inquiry/list">❓ 문의 답변</a>
         </div>
     </div>
 </div>
 
 <div class="main-content">
-    <h1>🔧관리자 메인 페이지</h1>
-    <ul class="admin-menu">
-        <li><a href="/admin/stock/form">📈 주식 등록 · 목록</a></li>
-        <li><a href="/admin/news/form">📰 뉴스 등록</a></li>
-        <li><a href="/admin/company/form">🏢 기업 등록</a></li>
-        <li><a href="/admin/communityAdmin?empNum=${sessionScope.authInfo.userNum}">💬 토론장 관리</a></li>
-        <li><a href="/admin/inquiry/list">❓ 문의 목록 및 답변</a></li>
-    </ul>
+    <h1>🔧 관리자 번호: ${empNum}</h1>
+    <h1>경제 뉴스</h1>
+        
 </div>
+	
 </body>
 </html>

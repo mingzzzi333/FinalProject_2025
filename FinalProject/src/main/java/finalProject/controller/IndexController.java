@@ -7,11 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import finalProject.domain.AuthInfoDTO;
 import finalProject.domain.BoardDTO;
+import finalProject.domain.CompanyDTO;
 import finalProject.mapper.BoardMapper;
 import finalProject.model.NewsArticle;
+import finalProject.service.CompanyService;
 import finalProject.service.NewsCrawlerService;
 import jakarta.servlet.http.HttpSession;
 
@@ -21,6 +24,8 @@ public class IndexController {
 	NewsCrawlerService newsCrawlerService;
 	@Autowired
 	BoardMapper boardMapper;
+	@Autowired
+	CompanyService companyService;
 	
 	@RequestMapping("/")
     public String index(Model model) {
@@ -82,9 +87,52 @@ public class IndexController {
 	 }
 	
 	//주식정보로 이동
-	@GetMapping("/stock")
-	public String stockPage() {
-		return "stock/stockMain";
-	}	
+	/*
+	 * @GetMapping("/stock") public String stockPage() { return "stock/stockMain"; }
+	 */
+	 
+	 @GetMapping("/stock")
+	    public String showCompanyList(@RequestParam(value = "keyword", required = false) String keyword,
+	                                  @RequestParam(value = "page", defaultValue = "1") int page,
+	                                  Model model) {
+
+	        int pageSize = 10;
+	        int pageGroupSize = 10;
+	        int offset = (page - 1) * pageSize;
+
+	        List<CompanyDTO> companyList;
+	        int totalCount;
+
+	        if (keyword != null && !keyword.trim().isEmpty()) {
+	            companyList = companyService.searchByCompanyNamePaged(keyword, offset, pageSize);
+	            totalCount = companyService.countByCompanyName(keyword);
+	        } else {
+	            companyList = companyService.getCompaniesPaged(offset, pageSize);
+	            totalCount = companyService.getTotalCompanyCount();
+	        }
+
+	        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+
+	        // ✨ 페이징 그룹 계산
+	        int startPage = ((page - 1) / pageGroupSize) * pageGroupSize + 1;
+	        int endPage = startPage + pageGroupSize - 1;
+	        if (endPage > totalPages) {
+	            endPage = totalPages;
+	        }
+
+	        boolean hasPrev = startPage > 1;
+	        boolean hasNext = endPage < totalPages;
+
+	        model.addAttribute("companyList", companyList);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", totalPages);
+	        model.addAttribute("startPage", startPage);
+	        model.addAttribute("endPage", endPage);
+	        model.addAttribute("hasPrev", hasPrev);
+	        model.addAttribute("hasNext", hasNext);
+	        model.addAttribute("keyword", keyword);
+
+	        return "company/companyList";
+	    }
 	
 }
