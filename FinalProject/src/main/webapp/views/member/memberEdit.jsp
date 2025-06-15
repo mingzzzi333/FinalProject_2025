@@ -10,7 +10,6 @@ function togglePwArea() {
     const pwArea = document.getElementById("pwArea");
     pwArea.style.display = pwArea.style.display === "none" ? "block" : "none";
 }
-
 function validateForm() {
     const pwAreaVisible = document.getElementById("pwArea").style.display !== "none";
     const pw = document.getElementById("pw").value;
@@ -29,7 +28,6 @@ function validateForm() {
             return false;
         }
     }
-
     return true; // 통과 시 제출 허용
 }
 </script>
@@ -58,7 +56,6 @@ function validateForm() {
 		    display: flex;
 		    gap: 20px;
 		}
-		        
     </style>
 </head>
 <body>

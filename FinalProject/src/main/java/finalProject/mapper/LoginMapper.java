@@ -10,4 +10,5 @@ import finalProject.domain.MemberDTO;
 @Mapper
 public interface LoginMapper {
     public AuthInfoDTO loginSelectOne(@Param("userId") String userId);
+    
 }
