@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="finalProject.mapper.StockMapper">
+
+    <!-- 전일 누적 거래량 기준 최대치 -->
+    <select id="stockSelect" resultType="finalProject.domain.StockA3">
+        SELECT  
+            TO_CHAR(s.TRADING_DATE, 'yyyy-MM-dd') AS tradingDate,  
+            s.CUMULATIVE_VOLUME AS cumulativeVolume,  
+            s.PRICE AS price,  
+            s.SYMBOL AS symbol
+        FROM stock s
+        JOIN (
+            SELECT  
+                TRUNC(TRADING_DATE) AS TRADING_DATE,  
+                MAX(CUMULATIVE_VOLUME) AS MAX_CUMULATIVE_VOLUME
+            FROM stock
+            WHERE TRUNC(TRADING_DATE) != TRUNC(SYSDATE)
+            GROUP BY TRUNC(TRADING_DATE)
+        ) max_values
+        ON TRUNC(s.TRADING_DATE) = max_values.TRADING_DATE
+        AND s.CUMULATIVE_VOLUME = max_values.MAX_CUMULATIVE_VOLUME
+        ORDER BY TRUNC(s.TRADING_DATE) DESC
+    </select>
+
+    <!-- 오늘 기준, 시간 단위로 최신 1건 -->
+    <select id="stockCurrentSelect" resultType="finalProject.domain.StockA3">
+        SELECT * FROM (
+            SELECT s.*, 
+                   ROW_NUMBER() OVER (
+                       PARTITION BY TO_CHAR(trading_date, 'yyyy-MM-dd'), trading_hours
+                       ORDER BY TO_CHAR(trading_date, 'yyyy-MM-dd') DESC, trading_hours DESC, ROWID DESC
+                   ) AS rn
+            FROM stock s
+            WHERE TRUNC(trading_date) = TRUNC(SYSDATE)
+        )
+        WHERE rn = 1
+    </select>
+
+</mapper>

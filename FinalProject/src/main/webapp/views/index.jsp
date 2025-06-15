@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page session="true" %>
 <%
     finalProject.domain.AuthInfoDTO auth =
         (finalProject.domain.AuthInfoDTO) session.getAttribute("authInfo");
@@ -9,9 +12,6 @@
         out.println("세션 없음");
     }
 %>
-<%@ page session="true" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -155,95 +155,153 @@
         
         
         /* 추가한곳 */
-        .news-item img {
-           border-radius: 10px;
-           transition: transform 0.3s ease; /* 살짝 애니메이션도 넣어봄 */
-       }
-   
-       .news-item img:hover {
-           transform: scale(1.2); /* 마우스 올리면 살짝 커지게 */
-       }
-      .news-slider-container {
-          display: flex;
-          align-items: center;
-          position: relative;
-      }
-      
-      .slider-btn {
-          background: #ddd;
-          border: none;
-          font-size: 24px;
-          cursor: pointer;
-          padding: 10px;
-          user-select: none;
-      }
-      
-      .news-slider {
-          display: flex;
-          overflow: hidden;
-          scroll-behavior: smooth;
-          width: 80%;
-          margin: 0 15px;
-      }
-      
-      .news-item {
-          flex: 0 0 auto;
-          width: 180px; /* 조절가능 */
-          margin-right: 10px;
-          cursor: pointer;
-          text-align: center;
-      }
-      
-      .news-item img {
-          width: 100%;
-          height: 100px;
-          object-fit: cover;
-      }
-      
-      .news-title {
-          margin-top: 5px;
-          font-size: 14px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-      }
-      .rounded-button {
-          background-color: #ff69b4; /* 버튼 색 */
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 25px; /* 둥근 모서리 */
-          cursor: pointer;
-          font-size: 16px;
-          transition: background-color 0.3s ease;
-      }
-      
-      .rounded-button:hover {
-          background-color: #800080;   /* 마우스 올렸을때 */
-      }
-      
-      /* 더보기 버튼 */
-      .more-button {
-          background-color: #800080; /* 보라색 */
-          color: white;
-          border: none;
-          border-radius: 15px;
-          padding: 6px 15px;
-          font-size: 12px;
-          cursor: pointer;
-          margin-top: 10px;  /* 슬라이더 버튼 아래 간격 */
-          transition: background-color 0.3s ease;
-          align-self: center; /* 가운데 정렬 */
-          box-shadow: 0 2px 5px rgba(128, 0, 128, 0.5);
-      }
-      
-      .more-button:hover {
-          background-color: #5a005a;
-      }
-      
-      .news-item {
-          min-height: 10px; /* 제목 + 날짜 감안 */
-      }
+        .news-slider-container {
+		    display: flex;
+		    flex-direction: column;
+		    align-items: center;
+		    position: relative;
+		}
+		
+		.news-slider-wrapper {
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    width: 100%;
+		}
+		
+		.news-slider {
+		    display: flex;
+		    overflow: hidden;
+		    scroll-behavior: smooth;
+		    width: 90%; /* ✅ 기존보다 넓게 */
+		    padding: 10px 0;
+		    margin: 0 20px;
+		}
+		
+		.news-item {
+		    flex: 0 0 auto;
+		    width: 200px; /* ✅ 조금 넓게 */
+		    margin: 0 10px;
+		    cursor: pointer;
+		    text-align: center;
+		    border-radius: 10px;
+		    transition: transform 0.3s ease;
+		}
+		
+		.news-item img {
+		    width: 100%;
+		    height: 140px;
+		    object-fit: cover;
+		    border-radius: 10px;
+		    transition: transform 0.3s ease;
+		}
+		
+		.news-item img:hover {
+		    transform: scale(1.1);
+		}
+		
+		.news-title {
+		    margin-top: 5px;
+		    font-size: 14px;
+		    white-space: nowrap;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		}
+		
+		/* ✅ 세련된 좌우 화살표 버튼 */
+		.arrow-button {
+		    width: 40px;
+		    height: 40px;
+		    margin-bottom: 30px; 
+		    background-color: white;
+		    border: 2px solid #1a73e8;
+		    color: #1a73e8;
+		    border-radius: 50%;
+		    font-size: 20px;
+		    font-weight: bold;
+		    cursor: pointer;
+		    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+		    transition: all 0.3s ease;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		}
+		
+		.arrow-button:hover {
+		    background-color: #1a73e8;
+		    color: white;
+		}
+		
+		/* 더보기 버튼 동일 유지 */
+		.more-button {
+		    margin-top: 15px;
+		    background-color: #1a73e8;
+		    color: white;
+		    border: none;
+		    border-radius: 20px;
+		    padding: 8px 20px;
+		    font-size: 14px;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+		}
+		
+		.more-button:hover {
+		    background-color: #155ab6;
+		}
+		ㄴ
+		/*기업 리스트*/
+		.company-table {
+		    width: 100%;
+		    margin-left: 40px; /* ✅ 원하는 만큼 조절 가능 */
+		    border-collapse: collapse;
+		    border-radius: 12px;
+		    overflow: hidden;
+		    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+		    font-size: 14px;
+		    margin-top: 20px;
+		}
+		
+		.company-table thead {
+		    background-color: #f0f5ff; /* 연한 남색 느낌 배경 */
+		}
+		
+		
+		.company-table th, .company-table td {
+		    padding: 13px 40px;
+		    text-align: left;
+		    border-bottom: 1px solid #c5d7f0; /* ✅ 희미한 남색 테두리 */
+		    max-width: 300px;
+		    white-space: nowrap;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		}
+		
+		.company-table th {
+		    color: #333;
+		    font-weight: 600;
+		}
+		
+		.company-table td {
+		
+		    color: #555;
+		}
+		
+		.company-table a.company-link {
+		
+		    color: #1a73e8;
+		    text-decoration: none;
+		    font-weight: bold;
+		}
+		
+		.company-table a.company-link:hover {
+		    text-decoration: underline;
+		}
+		
+		.company-table tr:hover {
+		    background-color: #f9f9f9;
+		}
+				
       
     </style>
 </head>
@@ -288,35 +346,68 @@
         </div>
     </div>
 </div>
-
+ <a href="/stockdata">실시간데이터</a>
 <div class="main-content">
-    <h1>메인 콘텐츠 영역</h1>
-    
+	<h2>📊 기업 리스트</h2>
+<table class="company-table" style="margin-bottom: 30px; margin-left: 80px;" >
+    <thead>
+        <tr >
+        	<th text-align: center;>No.</th>
+            <th text-align: center;>기업명</th>
+            <th text-align: center;>업종</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:choose>
+            <c:when test="${not empty companyList}">
+                <c:forEach var="company" items="${companyList}" varStatus="status">
+				    <c:if test="${status.index < 5}">
+				        <tr>
+				 	       <td>${status.index + 1}</td>
+				            <td><a href="/company/${company.companyNum}" class="company-link">${company.companyName}</a></td>
+				            <td>${company.companyType}</td>
+				        </tr>
+				    </c:if>
+				</c:forEach>
+            </c:when>
+            <c:otherwise>
+                <tr>
+                    <td colspan="5" style="text-align: center;">📭 검색 결과가 없습니다</td>
+                </tr>
+            </c:otherwise>
+        </c:choose>
+    </tbody>
+</table>
+
+	
+    <h1>뉴스 콘텐츠 영역</h1>   
     <div class="news-slider-container">
-        <button id="prevBtn" class="rounded-button">&lt;</button>
+    <div class="news-slider-wrapper">
+        <button id="prevBtn" class="arrow-button">&larr;</button>
         <div class="news-slider">
             <c:forEach var="news" items="${newsList}">
                 <div class="news-item" onclick="window.open('${news.link}', '_blank')">
                     <img src="${news.imageUrl}" alt="뉴스 이미지" />
                     <p class="news-title" title="${news.title}">
-                   <c:choose>
-                       <c:when test="${fn:length(news.title) > 15}">
-                           ${fn:substring(news.title, 0, 15)}...
-                       </c:when>
-                       <c:otherwise>
-                           ${news.title}
-                       </c:otherwise>
-                   </c:choose>
-               </p>
-               <p style="font-size: 12px; color: #999; margin: 2px 0 0 0;">작성일: ${news.pubDate}</p>
+                        <c:choose>
+                            <c:when test="${fn:length(news.title) > 15}">
+                                ${fn:substring(news.title, 0, 15)}...
+                            </c:when>
+                            <c:otherwise>
+                                ${news.title}
+                            </c:otherwise>
+                        </c:choose>
+                    </p>
+                    <p style="font-size: 12px; color: #999; margin: 2px 0 0 0;">작성일: ${news.pubDate}</p>
                 </div>
             </c:forEach>
         </div>
-        <button id="nextBtn" class="rounded-button">&gt;</button>
-        <!-- 더보기 버튼 -->
-        <button id="moreBtn" class="more-button">더보기</button>
+        <button id="nextBtn" class="arrow-button">&rarr;</button>
     </div>
+
+    <button id="moreBtn" class="more-button">더보기</button>
 </div>
+
 
 <!-- 오버레이 -->
 <div id="overlay" class="overlay" onclick="closeMyPage()"></div>
