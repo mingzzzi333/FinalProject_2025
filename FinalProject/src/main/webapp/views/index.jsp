@@ -418,7 +418,7 @@
         <span class="close-btn" onclick="closeMyPage()">×</span>
         <h2>👤 내 정보</h2>
       <ul style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
-          <li><a href="/myPage">회원정보</a></li>
+          <li><a href="/member/myPage">회원정보</a></li>
           <li><a href="/myAsset">내 자산</a></li>
           <li><a href="/myStoke">보유종목</a></li>
           <li><a href="/wish">관심종목</a></li>

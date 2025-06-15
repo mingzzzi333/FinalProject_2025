@@ -9,13 +9,15 @@ import finalProject.mapper.MemberMapper;
 
 @Service
 public class MemberDetailService {
-	@Autowired
-	MemberMapper memberMapper;
-	
-	public void execute(Model model, String memberNum) {
-	    MemberDTO dto = memberMapper.memSelectOne(memberNum);
-	    model.addAttribute("memberCommand", dto);
-	}
-
+   @Autowired
+   MemberMapper memberMapper;
+   
+   public void execute(Model model, String memberNum) {
+       MemberDTO dto = memberMapper.memSelectOne(memberNum);
+       model.addAttribute("memberCommand", dto);
+   }
+   public MemberDTO getMemberInfo(String memberNum) {
+       return memberMapper.selectByMemberNum(memberNum);
+   }
 
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="finalProject.mapper.InquiryMapper">
+
+    <resultMap id="inquiryWithMemberIdMap" type="finalProject.domain.InquiryDTO">
+        <result property="inquiryNum" column="INQUIRY_NUM"/>
+        <result property="memberNum" column="MEMBER_NUM"/>
+        <result property="employeeNum" column="EMPLOYEE_NUM"/>
+        <result property="inquiryTitle" column="INQUIRY_TITLE"/>
+        <result property="inquiryContent" column="INQUIRY_CONTENT"/>
+        <result property="inquiryRegist" column="INQUIRY_REGIST"/>
+        <result property="inquiryStatus" column="INQUIRY_STATUS"/>
+        <result property="answerContent" column="ANSWER_CONTENT"/>
+        <result property="answerDate" column="ANSWER_DATE"/>
+        <result property="memberId" column="MEMBER_ID"/>
+    </resultMap>
+
+    <insert id="insertInquiry">
+        INSERT INTO INQUIRY (
+            INQUIRY_NUM, MEMBER_NUM, INQUIRY_TITLE, INQUIRY_CONTENT, INQUIRY_REGIST, INQUIRY_STATUS
+        ) VALUES (
+            #{inquiryNum}, #{memberNum}, #{inquiryTitle}, #{inquiryContent}, SYSDATE, '대기'
+        )
+    </insert>
+
+    <select id="getInquiriesByMember" resultType="finalProject.domain.InquiryDTO">
+        SELECT * FROM INQUIRY WHERE MEMBER_NUM = #{memberNum} ORDER BY INQUIRY_REGIST DESC
+    </select>
+
+    <select id="getAllInquiries" resultMap="inquiryWithMemberIdMap">
+        SELECT 
+            i.INQUIRY_NUM, i.MEMBER_NUM, i.EMPLOYEE_NUM, i.INQUIRY_TITLE, i.INQUIRY_CONTENT,
+            i.INQUIRY_REGIST, i.INQUIRY_STATUS, i.ANSWER_CONTENT, i.ANSWER_DATE,
+            m.MEMBER_ID
+        FROM INQUIRY i
+        LEFT JOIN MEMBER m ON i.MEMBER_NUM = m.MEMBER_NUM
+        ORDER BY i.INQUIRY_REGIST DESC
+    </select>
+
+    <select id="getInquiryByNum" resultMap="inquiryWithMemberIdMap">
+        SELECT 
+            i.INQUIRY_NUM, i.MEMBER_NUM, i.EMPLOYEE_NUM, i.INQUIRY_TITLE, i.INQUIRY_CONTENT,
+            i.INQUIRY_REGIST, i.INQUIRY_STATUS, i.ANSWER_CONTENT, i.ANSWER_DATE,
+            m.MEMBER_ID
+        FROM INQUIRY i
+        LEFT JOIN MEMBER m ON i.MEMBER_NUM = m.MEMBER_NUM
+        WHERE i.INQUIRY_NUM = #{inquiryNum}
+    </select>
+
+    <update id="updateAnswer">
+        UPDATE INQUIRY
+        SET ANSWER_CONTENT = #{answerContent},
+            ANSWER_DATE = SYSDATE,
+            EMPLOYEE_NUM = #{employeeNum},
+            INQUIRY_STATUS = '완료'
+        WHERE INQUIRY_NUM = #{inquiryNum}
+    </update>
+
+</mapper>
