@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
@@ -193,14 +194,14 @@
         <table>
             <tr>
                 <td colspan="2" align="left">
-                    <label><input type="checkbox" name="autoLogin"> 자동 로그인</label>
-                    &nbsp;|&nbsp;
-                    <label><input type="checkbox" name="idStore"> 아이디 저장</label>
-                </td>
+                    <label><input type="checkbox" name="autoLogin"/> 자동 로그인</label>
+           			 &nbsp;|&nbsp;
+            		<label><input type="checkbox" name="idStore"/> 아이디 저장</label>
+        		</td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="text" name="userId" placeholder="아이디" /><br/>
+                    <input type="text" name="userId" value="${cookie.idStore != null ? cookie.idStore.value : ''}" /><br/>
                     <input type="password" name="userPw" placeholder="비밀번호" />
                 </td>
             </tr>
@@ -217,7 +218,13 @@
                 </td>
             </tr>
         </table>
+        <c:if test="${not empty errorMessage}">
+        <p style="color:red">${errorMessage}</p>
+    </c:if>
     </form>
+    
+    
+    
 </div>
 
     </div>

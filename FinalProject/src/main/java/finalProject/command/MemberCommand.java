@@ -1,5 +1,7 @@
 package finalProject.command;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -14,7 +16,8 @@ public class MemberCommand {
    String memAddr;
    String memDetailAddr;
    String memPost;
-   String memImg;
+   MultipartFile  memImg;
+   
    String memGender;
 }
 

@@ -167,9 +167,42 @@
             <span>회원번호:</span> ${memberInfo.memberNum}
         </div>
         <div class="info-row">
+            <span>이름:</span> ${memberInfo.memberName}
+        </div>
+        <div class="info-row">
+            <span>성별:</span> ${memberInfo.memberGender}
+        </div>
+        <div class="info-row">
+            <span>이메일:</span> ${memberInfo.memberEmail}
+        </div>
+        <div class="info-row">
+            <span>전화번호:</span> ${memberInfo.memberPhone}
+        </div>
+        <div class="info-row">
+            <span>주소:</span> ${memberInfo.memberAddr} ${memberInfo.memberDetailAddr}
+        </div>
+        <div class="info-row">
+            <span>우편번호:</span> ${memberInfo.memberPost}
+        </div>
+        <div class="info-row">
+		    <span>생년월일:</span> ${fn:substringBefore(memberInfo.memberBirth, ' ')}
+		</div>
+        <div class="info-row">
             <span>등급:</span> ${sessionScope.authInfo.grade}
         </div>
+
+        <c:if test="${not empty memberInfo.memberImg}">
+            <div class="info-row">
+                <span>프로필 이미지:</span><br />
+                <img src="/upload/${memberInfo.memberImg}" alt="프로필 이미지" style="width:150px; height:auto;" />
+            </div>
+        </c:if>
     </div>
+    <div style="text-align:center; margin-top: 30px;">
+    <form action="/member/memberEdit" method="get">
+        <button type="submit" style="padding: 10px 20px;">수정하기</button>
+    </form>
+</div>
 </div>
 
 <!-- 오버레이 -->

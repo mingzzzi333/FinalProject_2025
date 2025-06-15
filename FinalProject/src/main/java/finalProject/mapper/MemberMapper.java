@@ -14,4 +14,11 @@ public interface MemberMapper {
     public MemberDTO memSelectOne(String memberNum);
 
     MemberDTO selectByMemberNum(@Param("memberNum") String memberNum);
+
+    // 회원 상세 조회
+    MemberDTO getMemberInfo(String memberNum);
+
+    // 회원 수정 (여기 추가됨 ✅)
+    void updateMember(MemberDTO memberDTO);
+    
 }
