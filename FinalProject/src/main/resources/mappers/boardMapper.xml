@@ -4,27 +4,28 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="finalProject.mapper.BoardMapper">
 
-<insert id="insertBoard" parameterType="finalProject.domain.BoardDTO">
+  <insert id="insertBoard" parameterType="finalProject.domain.BoardDTO">
     INSERT INTO board (
-      board_num,board_title, employee_num
+      board_num, board_title, employee_num
     )
     VALUES (
-      #{boardNum},#{boardTitle},#{employeeNum}
+      #{boardNum}, #{boardTitle}, #{employeeNum}
     )
   </insert>
   
   <select id="boardNumAutoSelect" resultType="int">
-    	SELECT NVL(MAX(board_num), 0) + 1 FROM board
-	</select>
-	
-	<select id="selectBoardsList" parameterType="String" resultType="finalProject.domain.BoardDTO">
+    SELECT NVL(MAX(board_num), 0) + 1 FROM board
+  </select>
+  
+  <select id="selectBoardsList" parameterType="string" resultType="finalProject.domain.BoardDTO">
     SELECT board_num, board_title
     FROM board
     WHERE employee_num = #{empNum}
     ORDER BY board_num
-</select>
+  </select>
 
-<select id="selectAllBoards" resultType="BoardDTO">
-    SELECT * FROM BOARD
-</select>
+  <select id="selectAllBoards" resultType="finalProject.domain.BoardDTO">
+    SELECT * FROM board
+  </select>
+
 </mapper>

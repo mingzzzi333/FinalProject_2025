@@ -1,4 +1,4 @@
-package finalProject.service;
+package finalProject.service.inquiry;
 
 import java.util.List;
 import java.util.UUID;

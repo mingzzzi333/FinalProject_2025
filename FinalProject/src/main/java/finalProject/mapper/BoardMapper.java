@@ -8,12 +8,12 @@ import finalProject.domain.BoardDTO;
 
 @Mapper
 public interface BoardMapper {
-	public void insertBoard(BoardDTO dto);
+   public void insertBoard(BoardDTO dto);
 
-	public int boardNumAutoSelect();
-	
-	public List<BoardDTO> selectBoardsList(String empNum);
-	
-	List<BoardDTO> selectAllBoards();
+   public int boardNumAutoSelect();
+   
+   public List<BoardDTO> selectBoardsList(String empNum);
+   
+   List<BoardDTO> selectAllBoards();
 
 }

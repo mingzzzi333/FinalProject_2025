@@ -1,7 +1,10 @@
 package finalProject.controller;
 
 import finalProject.domain.CompanyDTO;
-import finalProject.service.CompanyService;
+import finalProject.domain.CommunityDTO;
+import finalProject.service.community.CommunityListService;
+import finalProject.service.company.CompanyService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +17,12 @@ import java.util.List;
 public class CompanyController {
 
     @Autowired
-    CompanyService companyService;
+    private CompanyService companyService;
 
+    @Autowired
+    private CommunityListService communityListService;
+
+    // 기업 목록 (검색 + 페이징)
     @GetMapping("/list")
     public String showCompanyList(@RequestParam(value = "keyword", required = false) String keyword,
                                   @RequestParam(value = "page", defaultValue = "1") int page,
@@ -38,7 +45,7 @@ public class CompanyController {
 
         int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 
-        // ✨ 페이징 그룹 계산
+        // 페이징 그룹 계산
         int startPage = ((page - 1) / pageGroupSize) * pageGroupSize + 1;
         int endPage = startPage + pageGroupSize - 1;
         if (endPage > totalPages) {
@@ -60,6 +67,7 @@ public class CompanyController {
         return "company/companyList";
     }
 
+    // 기업 상세 정보
     @GetMapping("/{companyNum}")
     public String showCompanyDetail(@PathVariable("companyNum") String companyNum, Model model) {
         CompanyDTO company = companyService.getCompanyByNum(companyNum);
@@ -69,4 +77,11 @@ public class CompanyController {
         model.addAttribute("company", company);
         return "company/companyDetail";
     }
+    
+ // 기업 상세 정보
+    @GetMapping("/samsung")
+    public String showCompanyDetail() {
+        return "company/companySam";
+    }
+
 }

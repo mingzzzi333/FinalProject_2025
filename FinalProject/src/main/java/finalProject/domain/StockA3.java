@@ -13,4 +13,5 @@ public class StockA3 {
 	int price;
 	int volume;
 	int cumulativeVolume;
+	
 }

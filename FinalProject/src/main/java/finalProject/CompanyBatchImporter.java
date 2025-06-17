@@ -1,7 +1,8 @@
 package finalProject;
 
 import finalProject.domain.CompanyDTO;
-import finalProject.service.CompanyService;
+import finalProject.service.company.CompanyService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

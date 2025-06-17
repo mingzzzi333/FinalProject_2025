@@ -1,4 +1,4 @@
-package finalProject.service;
+package finalProject.service.member;
 
 import java.io.File;
 import java.io.IOException;

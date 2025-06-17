@@ -12,20 +12,20 @@ import finalProject.command.BoardCommand;
 import finalProject.domain.AuthInfoDTO;
 import finalProject.domain.BoardDTO;
 import finalProject.mapper.BoardMapper;
-import finalProject.service.BoardAutoNumService;
-import finalProject.service.BoardWriteService;
+import finalProject.service.board.BoardAutoNumService;
+import finalProject.service.board.BoardWriteService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AdminController {
-	@Autowired
-	BoardWriteService boardWriteService;
-	@Autowired
-	BoardAutoNumService boardAutoNumService;
-	@Autowired
-	BoardMapper boardMapper;
-	
-	//관리하기 페이지로 이동
+   @Autowired
+   BoardWriteService boardWriteService;
+   @Autowired
+   BoardAutoNumService boardAutoNumService;
+   @Autowired
+   BoardMapper boardMapper;
+   
+   //관리하기 페이지로 이동
     @GetMapping("/adminMain")
     public String empManager() {
         return "employee/adminMain";
@@ -34,7 +34,7 @@ public class AdminController {
   //뉴스 관리 페이지
     @GetMapping("/admin/newsAdmin")
     public String commuManager() {
-	    return "news/newsAdmin";
+       return "news/newsAdmin";
     }
     
     
@@ -60,17 +60,18 @@ public class AdminController {
     //게시판 생성 + 자동부여
     @GetMapping("/admin/boardWrite")
     public String boardWrite(Model model) {
-  		boardAutoNumService.execute(model);
+        boardAutoNumService.execute(model);
         return "community/boardForm";
     }
-    //게시판 작성
+    
     @PostMapping("/boardWrite")
     public String commuManager(BoardCommand boardCommand) {
+        System.out.println("employeeNum = " + boardCommand.getEmpNum());
+        System.out.println("boardTitle = " + boardCommand.getBoardTitle());
         boardWriteService.execute(boardCommand);
-        return "community/communityAdmin";
+        return "redirect:/admin/communityAdmin";
+    }
+
     }
     
     
-  	
-
-}

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import finalProject.command.LoginCommand;
 import finalProject.domain.AuthInfoDTO;
-import finalProject.service.LoginService;
+import finalProject.service.login.LoginService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

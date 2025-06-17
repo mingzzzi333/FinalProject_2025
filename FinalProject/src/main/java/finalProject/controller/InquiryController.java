@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import finalProject.domain.AuthInfoDTO;
 import finalProject.domain.InquiryDTO;
-import finalProject.service.InquiryService;
+import finalProject.service.inquiry.InquiryService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller

@@ -1,4 +1,4 @@
-package finalProject.service;
+package finalProject.service.board;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import finalProject.mapper.BoardMapper;
 
 @Service
 public class BoardAutoNumService {
-	@Autowired
+   @Autowired
     BoardMapper boardMapper;
 
     public void execute(Model model) {

@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8">  
     <title>토론장</title>
     <style>
         html, body {
@@ -57,13 +58,13 @@
         }
 
         .search-form button:hover {
-		    background-color: #3e78c2;
-		}
+          background-color: #3e78c2;
+      }
 
         .search-box input[type="text"] {
-        	border : 1px;
-        	border-radius: 20px 0 0 20px;
-        	margin-top: 16px;
+           border : 1px;
+           border-radius: 20px 0 0 20px;
+           margin-top: 16px;
             width: 600px;
             height: 40px;
             padding: 10px;
@@ -71,9 +72,9 @@
         }
 
         .search-box button {
-        	border : 1px;
-        	border-radius: 0 20px 20px 0;
-        	margin-top: 15px;
+           border : 1px;
+           border-radius: 0 20px 20px 0;
+           margin-top: 15px;
             width: 100px;
             height: 40px;
             padding: 5px 10px;
@@ -87,7 +88,6 @@
             align-items: center;
             width: 100%;
         }
-        
     </style>
 </head>
 <body>
@@ -118,25 +118,34 @@
 
     <div class="main-content">
         <h1>게시글 작성</h1>
-        <form action="communityInsert" method="post" enctype="multipart/form-data">
-			<table border=1 width=600>
-				<tr><th>회원번호</th>
-					<td><input type="text" name="memNum" value="${memberNum }"/></td></tr>
-				<tr><th>작성자</th>
-					<td><input type="text" name="memNum" value="${memberName }"/></td></tr>
-				<tr><th>제목</th>
-					<td><input type="text" name="commuSubject"/></td></tr>
-				<tr><th>내용</th>
-					<td><textarea name="commuContents" style="width: 500px; height: 200px;"></textarea></td></tr>
-			    <tr><th>파일</th>
-					<td><input type="file" name="commuFile" multiple="multiple"/></td></tr>
-				<tr><th>이미지파일</th>
-					<td><input type="file" name="commuImageFile" multiple="multiple"/></td></tr>		
-				<tr><th colspan="2"><input type="submit" value="등록">
-					<!-- <input type="button" value="목록으로" onclick="javascript:location.href='memberList'" /> -->
-				</th></tr>
-			</table>
-			</form>
+        <form action="${pageContext.request.contextPath}/community/write" method="post" enctype="multipart/form-data">
+           <!-- 게시판 번호는 숨겨진 필드로 보냅니다 -->
+           <input type="hidden" name="boardNum" value="${boardNum}" />
+           
+         <table border=1 width=600>
+            <tr><th>회원번호</th>
+            <td><input type="text" name="memNum" value="${memberNum}" /></td></tr>
+            
+            <tr><th>작성자</th>
+            <td><input type="text" name="memName" value="${memberName}" readonly /></td></tr>
+            
+            <tr><th>제목</th>
+               <td><input type="text" name="commuSubject" /></td></tr>
+            
+            <tr><th>내용</th>
+               <td><textarea name="commuContents" style="width: 500px; height: 200px;"></textarea></td></tr>
+             
+             <tr><th>파일</th>
+               <td><input type="file" name="commuFile" multiple="multiple" /></td></tr>
+            
+            <tr><th>이미지파일</th>
+               <td><input type="file" name="commuImageFile" multiple="multiple" /></td></tr>      
+            
+            <tr><th colspan="2">
+                <input type="submit" value="등록" />
+            </th></tr>
+         </table>
+      </form>
     </div>
 </body>
 </html>

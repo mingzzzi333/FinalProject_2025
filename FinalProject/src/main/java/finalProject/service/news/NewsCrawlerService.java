@@ -1,4 +1,4 @@
-package finalProject.service;
+package finalProject.service.news;
 
 import java.io.IOException;
 import java.util.ArrayList;

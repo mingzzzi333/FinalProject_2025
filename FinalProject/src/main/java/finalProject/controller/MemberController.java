@@ -16,10 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import finalProject.command.MemberCommand;
 import finalProject.domain.AuthInfoDTO;
 import finalProject.domain.MemberDTO;
-import finalProject.service.MemberAutoNumService;
-import finalProject.service.MemberDetailService;
-import finalProject.service.MemberUpdateService;
-import finalProject.service.MemberWriteService;
+import finalProject.service.member.MemberAutoNumService;
+import finalProject.service.member.MemberDetailService;
+import finalProject.service.member.MemberUpdateService;
+import finalProject.service.member.MemberWriteService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller

@@ -1,49 +1,103 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-   
-<!DOCTYPE html>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<canvas id="stockChart" width="800" height="400"></canvas>
-<script>
-  const ctx = document.getElementById('stockChart').getContext('2d');
-  const stockChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30'], // 시간
-      datasets: [{
-        label: '삼성전자 주가',
-        data: [72000, 72500, 71000, 73000, 73500, 74000], // 가격 데이터
-        fill: false,
-        borderColor: 'blue',
-        tension: 0.1
-      }]
-    },
-    options: {
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: '시간'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: '주가 (원)'
-          },
-          beginAtZero: false
-        }
-      }
-    }
-  });
-</script>
-
 <head>
-<meta charset="UTF-8">
-<title>기업 상세정보</title>
+    <title>${company.companyName} - 기업 정보</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .button-box {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-기업 정보
+
+<h3>
+    📋 
+    <a href="/company/list?keyword=${company.companyName}" style="text-decoration: none;">
+        ${company.companyName}
+    </a> 
+    기업 정보
+</h3>
+
+<!-- 기본정보 -->
+<div class="section">
+    <h4>기본정보</h4>
+    <table>
+        <tr>
+            <th>대표자</th>
+            <td>${company.companyCeoName}</td>
+        </tr>
+        <tr>
+            <th>설립일</th>
+            <td><fmt:formatDate value="${company.establishDate}" pattern="yyyy-MM-dd" /></td>
+        </tr>
+        <tr>
+            <th>상장일</th>
+            <td><fmt:formatDate value="${company.companyListDate}" pattern="yyyy-MM-dd" /></td>
+        </tr>
+        <tr>
+            <th>테마</th>
+            <td>${company.companyType}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- 회사 설명 -->
+<div class="section">
+    <h4>회사 설명</h4>
+    <div style="white-space: pre-line; border: 1px solid #ccc; padding: 10px;">
+        ${company.companyContent}
+    </div>
+</div>
+
+<!-- ✅ 재무정보 -->
+<div class="section">
+    <h4>📊 재무정보 </h4>
+    <c:choose>
+        <c:when test="${not empty financeList}">
+            <table border="1" cellpadding="5" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>금액</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="item" items="${financeList}">
+                        <tr>
+                            <td>${item.accountName}</td>
+                            <td>${item.amount}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:when>
+        <c:otherwise>
+            <p style="color: gray;">📭 등록된 재무정보가 없습니다.</p>
+        </c:otherwise>
+    </c:choose>
+</div>
+
+<!-- 게시판 이동 버튼 -->
+<div class="button-box">
+    <a href="/community/list?companyNum=${company.companyNum}">
+        <button type="button">기업 주식 게시판</button>
+    </a>
+</div>
+
+
+
 </body>
 </html>

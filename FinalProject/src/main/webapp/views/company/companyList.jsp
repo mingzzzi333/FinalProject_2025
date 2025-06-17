@@ -321,6 +321,15 @@
         <tbody>
             <c:choose>
                 <c:when test="${not empty companyList}">
+			        <c:if test="${currentPage == 1}">
+			            <tr>
+			                <td>00001</td>
+			                <td><a href="/company/samsung" class="company-link">삼성전자</a></td>
+			                <td>홍길동</td>
+			                <td>제조업</td>
+			                <td>2020-01-01</td>
+			            </tr>
+			        </c:if>
                     <c:forEach var="company" items="${companyList}">
                         <tr>
                             <td>${company.companyNum}</td>

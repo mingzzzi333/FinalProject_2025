@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import finalProject.command.EmployeeCommand;
-import finalProject.service.EmployeeAutoNumService;
-import finalProject.service.EmployeeWriteService;
+import finalProject.service.employee.EmployeeAutoNumService;
+import finalProject.service.employee.EmployeeWriteService;
 
 @Controller
 @RequestMapping("/employee")

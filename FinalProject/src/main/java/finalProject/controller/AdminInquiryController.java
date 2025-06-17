@@ -2,7 +2,8 @@ package finalProject.controller;
 
 import finalProject.domain.AuthInfoDTO;
 import finalProject.domain.InquiryDTO;
-import finalProject.service.InquiryService;
+import finalProject.service.inquiry.InquiryService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

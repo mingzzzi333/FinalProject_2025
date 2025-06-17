@@ -125,19 +125,19 @@
     <h1>🔧 관리자 번호: ${empNum}</h1>
     <a href="/admin/boardWrite?empNum=${sessionScope.authInfo.userNum}">게시판 생성</a>
     <div class="sidebar">
-	    <h3>📂 내가 만든 게시판</h3>
-	    <h3>게시판 개수: ${fn:length(boardList)}</h3>
-	    <ul class="board-list">
-	        <c:forEach var="board" items="${boardList}">
-			    <li>
-			        <a href="/community/list?boardNum=${board.boardNum}">
-			            ${board.boardTitle}
-			        </a>
-			    </li>
-			</c:forEach>
-	    </ul>
-	</div>
+       <h3>📂 내가 만든 게시판</h3>
+       <h3>게시판 개수: ${fn:length(boardList)}</h3>
+       <ul class="board-list">
+           <c:forEach var="board" items="${boardList}">
+             <li>
+                 <a href="/community/list?boardNum=${board.boardNum}">
+                     ${board.boardTitle}
+                 </a>
+             </li>
+         </c:forEach>
+       </ul>
+   </div>
 </div>
-	
+   
 </body>
 </html>

@@ -1,4 +1,4 @@
-package finalProject.service;
+package finalProject.service.company;
 
 import finalProject.CorpCodeParser;
 import finalProject.domain.CompanyDTO;
@@ -21,40 +21,23 @@ import java.util.List;
 @Service
 public class CompanyService {
 
-    private final String apiKey = "89e76675c6910dcdcbdb09fc5bb03e3795ea54dc";
+    private final String apiKey = "c6c705f3286c2168a91e187c20f68b56dc33bcd8";
 
     @Autowired
     private CompanyMapper companyMapper;
 
-    public CompanyDTO fetchCompanyInfo(String corpCode) {
-        try {
-            JSONObject companyJson = getJson("https://opendart.fss.or.kr/api/company.json?crtfc_key=" + apiKey + "&corp_code=" + corpCode);
+    public CompanyDTO fetchCompanyInfo(String corpCode) throws Exception {
+        JSONObject companyJson = getJson("https://opendart.fss.or.kr/api/company.json?crtfc_key=" + apiKey + "&corp_code=" + corpCode);
 
-            if (companyJson == null) {
-                System.err.println("❌ JSON 응답이 null입니다. corpCode=" + corpCode);
-                return null;
-            }
+        if (!companyJson.has("corp_name")) return null;
 
-            String status = companyJson.optString("status");
-            if (!"0000".equals(status)) {
-                System.err.println("❌ DART API 실패: corpCode=" + corpCode + " / status=" + status + " / message=" + companyJson.optString("message"));
-                return null;
-            }
-
-            CompanyDTO dto = new CompanyDTO();
-            dto.setCompanyNum(corpCode);
-            dto.setCompanyName(companyJson.optString("corp_name"));
-            dto.setCompanyCeoName(companyJson.optString("ceo_nm"));
-            dto.setCompanyYear(parseDate(companyJson.optString("est_dt")));
-            dto.setCompanyType(IndustryMapper.map(companyJson.optString("induty_code")));
-            dto.setIndustry(companyJson.optString("induty_code"));
-            return dto;
-
-        } catch (Exception e) {
-            System.err.println("❌ 예외 발생: corpCode=" + corpCode);
-            e.printStackTrace();
-            return null;
-        }
+        CompanyDTO dto = new CompanyDTO();
+        dto.setCompanyNum(corpCode);  // 기업코드
+        dto.setCompanyName(companyJson.optString("corp_name"));
+        dto.setCompanyCeoName(companyJson.optString("ceo_nm"));
+        dto.setCompanyYear(parseDate(companyJson.optString("est_dt")));
+        dto.setCompanyType(IndustryMapper.map(companyJson.optString("induty_code")));
+        return dto;
     }
 
     public void saveCompany(CompanyDTO company) {
@@ -117,44 +100,25 @@ public class CompanyService {
         }
     }
 
+    // ✅ 회사명으로 corpCode 반환
     public String getCorpCodeByCompanyName(String companyName) {
         if (companyName == null) return null;
         return CorpCodeParser.getCorpCodeByName(companyName.trim());
     }
 
-    private JSONObject getJson(String urlStr) {
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
+    // 내부 JSON 호출 도우미
+    private JSONObject getJson(String urlStr) throws Exception {
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
 
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                System.err.println("❌ 응답 실패: HTTP " + responseCode + " → " + urlStr);
-                return null;
-            }
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) sb.append(line);
+        br.close();
 
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) sb.append(line);
-
-                String jsonStr = sb.toString();
-                if (jsonStr.isBlank() || !jsonStr.trim().startsWith("{")) {
-                    System.err.println("❌ 응답 내용 없음 또는 비정상 형식: " + urlStr);
-                    return null;
-                }
-
-                return new JSONObject(jsonStr);
-            }
-
-        } catch (Exception e) {
-            System.err.println("❌ API 호출 예외: " + urlStr);
-            e.printStackTrace();
-            return null;
-        }
+        return new JSONObject(sb.toString());
     }
 
     private Date parseDate(String yyyymmdd) {

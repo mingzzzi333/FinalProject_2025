@@ -1,24 +1,50 @@
 package finalProject.domain;
 
-import org.apache.ibatis.type.Alias;
+import java.util.Date;
+import java.util.List;
 
+import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Alias("commu")
 @Data
 public class CommunityDTO {
-	String commuNum;            
-	String boardNum;             
-	String employeeNum;          
-	String memberNum;            
-	String companyNum;           
-	String commuWriter;          
-	String commuRegist;          // sysdate로 자동 입력
-	String commuUpdate;          // sysdate로 자동 입력
-	String commuSubject;         
-	String commuContents;       
-	String commuOriginalName;        // 첨부 파일 원본
-	String commuStoreName;           // 첨부 파일 저장명
-	String commuImageOriginalName;   // 이미지 파일 원본
-	String commuImageStoreName;      // 이미지 파일 저장명
+    private int commuNum;       
+    private Integer boardNum;     
+    private String employeeNum;
+    private String memberNum;
+    private String companyNum;
+    private String companyName;
+    
+    private String commuWriter;
+
+
+    private Date commuRegist;
+    private Date commuUpdate;
+    private String commuSubject;
+    private String commuContents;
+
+    private String commuOriginalName;
+    private String commuStoreName;
+    private String commuImageOriginalName;
+    private String commuImageStoreName;
+    
+
+    private int commuViews;
+    private int commuGood;
+
+    
+    private List<CommunityCommentDTO> comments;
+    // 작성자 이름 (JOIN으로 가져온 값)
+    private String writerName;
+    
+    private List<String> likedMemberNums;
+
+    public List<String> getLikedMemberNums() {
+        return likedMemberNums;
+    }
+
+    public void setLikedMemberNums(List<String> likedMemberNums) {
+        this.likedMemberNums = likedMemberNums;
+    }
 }

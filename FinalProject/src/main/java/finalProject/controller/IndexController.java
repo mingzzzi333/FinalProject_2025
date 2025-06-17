@@ -17,8 +17,8 @@ import finalProject.domain.StockA3;
 import finalProject.mapper.BoardMapper;
 import finalProject.model.NewsArticle;
 import finalProject.repository.StockRepository;
-import finalProject.service.CompanyService;
-import finalProject.service.NewsCrawlerService;
+import finalProject.service.company.CompanyService;
+import finalProject.service.news.NewsCrawlerService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller

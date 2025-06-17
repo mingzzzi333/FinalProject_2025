@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import finalProject.model.NewsArticle;
-import finalProject.service.NewsCrawlerService;
+import finalProject.service.news.NewsCrawlerService;
 
 @Controller
 public class NewsController {

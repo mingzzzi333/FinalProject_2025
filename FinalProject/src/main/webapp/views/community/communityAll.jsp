@@ -81,13 +81,13 @@
         }
         
         .search-form button:hover {
-		    background-color: #3e78c2;
-		}
+          background-color: #3e78c2;
+      }
 
         .search-box input[type="text"] {
-        	border : 1px;
-        	border-radius: 20px 0 0 20px;
-        	margin-top: 16px;
+           border : 1px;
+           border-radius: 20px 0 0 20px;
+           margin-top: 16px;
             width: 600px;
             height: 40px;
             padding: 10px;
@@ -95,9 +95,9 @@
         }
 
         .search-box button {
-        	border : 1px;
-        	border-radius: 0 20px 20px 0;
-        	margin-top: 15px;
+           border : 1px;
+           border-radius: 0 20px 20px 0;
+           margin-top: 15px;
             width: 100px;
             height: 40px;
             padding: 5px 10px;
@@ -198,19 +198,22 @@
 
 <div class="main-content">
     <h1>커뮤</h1>
-    <a href="/communityWrite">글쓰기</a>
+    <c:if test="${not empty boardList}">
+    <a href="${pageContext.request.contextPath}/community/write?boardNum=1">글쓰기</a>
+      </c:if>
+
     <div class="sidebar">
-	    <h3>📂게시판 개수: ${fn:length(boardList)}</h3>
-	    <ul class="board-list">
-	        <c:forEach var="board" items="${boardList}">
-			    <li>
-			        <a href="/community/list?boardNum=${board.boardNum}">
-			            ${board.boardTitle}
-			        </a>
-			    </li>
-			</c:forEach>
-	    </ul>
-	</div>
+       <h3>📂게시판 개수: ${fn:length(boardList)}</h3>
+       <ul class="board-list">
+           <c:forEach var="board" items="${boardList}">
+             <li>
+                 <a href="/community/list?boardNum=${board.boardNum}">
+                     ${board.boardTitle}
+                 </a>
+             </li>
+         </c:forEach>
+       </ul>
+   </div>
 </div>
 
 <!-- 오버레이 -->
@@ -221,13 +224,13 @@
     <div class="slide-panel-content">
         <span class="close-btn" onclick="closeMyPage()">×</span>
         <h2>👤 내 정보</h2>
-		<ul style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
-		    <li><a href="/myPage">회원정보</a></li>
-		    <li><a href="/myAsset">내 자산</a></li>
-		    <li><a href="/myStoke">보유종목</a></li>
-		    <li><a href="/wish">관심종목</a></li>
-		    <li><a href="/inquiry">문의하기</a></li>
-		</ul>
+      <ul style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
+          <li><a href="/myPage">회원정보</a></li>
+          <li><a href="/myAsset">내 자산</a></li>
+          <li><a href="/myStoke">보유종목</a></li>
+          <li><a href="/wish">관심종목</a></li>
+          <li><a href="/inquiry">문의하기</a></li>
+      </ul>
     </div>
 </div>
 
