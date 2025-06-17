@@ -18,7 +18,6 @@ public class CommunityDTO {
     
     private String commuWriter;
 
-
     private Date commuRegist;
     private Date commuUpdate;
     private String commuSubject;

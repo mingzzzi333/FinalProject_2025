@@ -56,6 +56,11 @@
             color: #ffc3c3;
             text-decoration: underline;
         }
+        
+        .no-style-link {
+            color: #fff;
+            text-decoration: none;
+        }
 
         .header-line2 {
             background: #ffe5e5;
@@ -290,7 +295,7 @@
 <body>
 
 <div class="header-line1">
-    INVEST YATRA
+    <div><a href="/home" class="no-style-link">INVEST YATRA</a></div>
     <div class="auth-links">
         <c:choose>
             <c:when test="${not empty authInfo}">

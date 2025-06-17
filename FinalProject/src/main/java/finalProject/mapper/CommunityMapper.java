@@ -52,4 +52,8 @@ public interface CommunityMapper {
 
     // 게시글 상세 조회
     CommunityDTO selectCommunityById(int commuNum);
+    
+    List<CommunityDTO> selectTop5ByLikes();
+
+
 }

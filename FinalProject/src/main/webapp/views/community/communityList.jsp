@@ -70,6 +70,10 @@
             font-size: 15px;
             color: #555;
         }
+        .no-style-link {
+            color: #fff;
+            text-decoration: none;
+        }
         .nav-links a {
             margin-right: 20px;
             color: #555;
@@ -286,7 +290,7 @@
 
 <!-- 헤더 1열 -->
 <div class="header-line1">
-    INVEST YATRA
+    <div><a href="/home" class="no-style-link">INVEST YATRA</a></div>
     <div class="auth-links">
         <c:choose>
             <c:when test="${not empty authInfo}">

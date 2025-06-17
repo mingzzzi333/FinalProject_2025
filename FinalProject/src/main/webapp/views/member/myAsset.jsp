@@ -215,72 +215,6 @@
 
       
     </style>
-    
-    <!-- 문의등록폼 -->
-    <style>
-    .inquiry-form-container {
-        max-width: 600px;
-        margin: 30px auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        font-family: Arial, sans-serif;
-    }
-
-    .inquiry-form-container h2 {
-        margin-bottom: 20px;
-        font-size: 22px;
-        color: #333;
-        text-align: center;
-    }
-
-    .form-group {
-        margin-bottom: 18px;
-    }
-
-    .form-group label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 6px;
-        color: #555;
-    }
-
-    .form-group input[type="text"],
-    .form-group textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 14px;
-        resize: none;
-    }
-
-    .form-group textarea {
-        height: 120px;
-    }
-
-    .form-submit {
-        text-align: center;
-    }
-
-    .form-submit button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 25px;
-        border: none;
-        border-radius: 6px;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .form-submit button:hover {
-        background-color: #45a049;
-    }
-    
-    
-</style>
-    
 </head>
 <body>
 <div class="header">
@@ -328,64 +262,27 @@
         </div>
     </div>
 </div>
-</div>
-<div class="inquiry-form-container">
-    <h2>📩 문의하기</h2>
-    <form action="/inquiry/add" method="post">
-        <div class="form-group">
-            <label for="inquiryTitle">제목</label>
-            <input type="text" id="inquiryTitle" name="inquiryTitle" required />
-        </div>
-        <div class="form-group">
-            <label for="inquiryContent">내용</label>
-            <textarea id="inquiryContent" name="inquiryContent" required></textarea>
-        </div>
-        <div class="form-submit">
-            <button type="submit">등록</button>
-        </div>
-    </form>
+
 </div>
 
 <div class="main-content">
 
-<hr/>
+<form action="/member/myAsset" method="post">
+    <input type="text" name="accountNum" id="accountNum" value="${account.accountNum}" maxlength="12" placeholder="계좌번호" />
+    <input type="text" name="accountName" id="accountName" value="${account.accountName}" maxlength="12" placeholder="예금주명" />
+    <input type="number" name="accountCash" id="accountCash" value="${account.accountCash}" placeholder="잔액" />
+    <input type="hidden" name="accountType" value="일반" />
+    <button type="submit">저장</button>
+</form>
 
-<!-- 내가 등록한 문의 목록 -->
-<h3>📋 나의 문의 목록</h3>
-<table border="1" width="100%" cellpadding="4" cellspacing="0" style="border-collapse: collapse; font-size: 13px;">
-    <thead style="background-color: #f9f9f9;">
-        <tr style="height: 30px;">
-            <th style="width: 6%;">No</th>
-            <th style="width: 12%;">제목</th>
-            <th style="width: 12%;">상태</th>
-            <th style="width: 18%;">등록일</th>
-            <th style="width: 39%;">문의 내용 및 답변</th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="i" items="${inquiries}" varStatus="status">
-            <tr style="height: 36px; line-height: 1.2;">
-                <td style="text-align: center;">${status.index + 1}</td>
-                <td style="padding: 6px;">${i.inquiryTitle}</td>
-                <td style="text-align: center;">${i.inquiryStatus}</td>
-                <td style="text-align: center;">
-                    <fmt:formatDate value="${i.inquiryRegist}" pattern="yyyy-MM-dd HH:mm" />
-                </td>
-                <td style="padding: 6px;">
-                    <div><b>문의 내용:</b> ${i.inquiryContent}</div>
-                    <c:if test="${not empty i.answerContent}">
-                        <div style="margin-top: 4px; background-color: #f0f8ff; padding: 4px; border-left: 3px solid #2196F3;">
-                            <b>문의 답변:</b> ${i.answerContent}
-                        </div>
-                    </c:if>
-                </td>
-            </tr>
-        </c:forEach>
-    </tbody>
-</table>
+<!-- 실시간 출력 영역 -->
+<div id="accountPreview" style="margin-top: 20px; padding: 10px; background: #ffeaea; border-radius: 10px;">
+    <h3>입력 정보 미리보기</h3>
+    <p>계좌번호: <span id="previewAccountNum"></span></p>
+    <p>예금주명: <span id="previewAccountName"></span></p>
+    <p>잔액: <span id="previewAccountCash"></span> 원</p>
+</div>
 
-
-    
 </div>
 
 
@@ -418,6 +315,31 @@ function closeMyPage() {
     document.getElementById("overlay").style.display = "none";
 }
 
+</script>
+
+
+<script>
+    const accountNumInput = document.getElementById("accountNum");
+    const accountNameInput = document.getElementById("accountName");
+    const accountCashInput = document.getElementById("accountCash");
+
+    const previewAccountNum = document.getElementById("previewAccountNum");
+    const previewAccountName = document.getElementById("previewAccountName");
+    const previewAccountCash = document.getElementById("previewAccountCash");
+
+    function updatePreview() {
+        previewAccountNum.textContent = accountNumInput.value;
+        previewAccountName.textContent = accountNameInput.value;
+        previewAccountCash.textContent = accountCashInput.value.toLocaleString(); // 콤마 포함
+    }
+
+    // 입력 이벤트에 리스너 연결
+    accountNumInput.addEventListener("input", updatePreview);
+    accountNameInput.addEventListener("input", updatePreview);
+    accountCashInput.addEventListener("input", updatePreview);
+
+    // 초기 렌더링 (서버 값으로 채워져 있으면 바로 반영)
+    updatePreview();
 </script>
 
 </body>

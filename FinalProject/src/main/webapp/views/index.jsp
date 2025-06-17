@@ -1,30 +1,38 @@
+
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page session="true" %>
-<%
-    finalProject.domain.AuthInfoDTO auth =
-        (finalProject.domain.AuthInfoDTO) session.getAttribute("authInfo");
-    if (auth != null) {
-        out.println("세션 있음 → 아이디: " + auth.getUserId() + ", 등급: " + auth.getGrade());
-    } else {
-        out.println("세션 없음");
-    }
-%>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>메인 화면</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
         html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f9fafb;
+            margin: 0; padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h3, h4 {
+            color: #ff6b6b;
+            margin-bottom: 16px;
+        }
+
+        a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
 
         .no-style-link {
@@ -39,40 +47,117 @@
             color: inherit;
         }
 
-        .header {
-            width: 100%;
-            height: 100px;
-            background-color: #f5f5f5;
-            border-bottom: 1px solid #ccc;
-        }
-
-        .header-line1, .header-line2 {
-            height: 50%;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .description-box {
+            white-space: pre-line;
+            border: 1px solid #ccc;
+            padding: 20px 24px;
+            border-radius: 10px;
+            background-color: #fff8f8;
+            margin-top: 20px;
         }
 
         .header-line1 {
-            background-color: #eaeaea;
+            background: #FF6B6B;
+            color: #fff;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            font-weight: 700;
+            font-size: 28px;
+            letter-spacing: 1.2px;
         }
 
-        .header-line2 {
-            background-color: #dcdcdc;
-        }
-
-        .auth-buttons a, .nav-links a {
-            margin-left: 10px;
+        .header-line1 a {
+            color: #fff;
             text-decoration: none;
-            color: #333;
-            font-weight: bold;
         }
 
-        .auth-buttons a:hover, .nav-links a:hover {
+        .header-line1 a:hover,
+        .header-line1 a:visited,
+        .header-line1 a:active {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .header-line1 .auth-links {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .header-line1 .auth-links a {
+            color: #fff;
+            margin-left: 16px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .header-line1 .auth-links a:hover {
+            color: #ffc3c3;
             text-decoration: underline;
         }
 
+        .header-line2 {
+            background: #ffe5e5;
+            padding: 12px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 15px;
+            color: #555;
+        }
+
+        .nav-links a {
+            margin-right: 20px;
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:last-child {
+            margin-right: 0;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b6b;
+            text-decoration: underline;
+        }
+
+        .search-box form {
+            display: flex;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+            background: #fff;
+        }
+        .search-box input[type="text"] {
+            padding: 10px 18px;
+            font-size: 14px;
+            border: none;
+            width: 280px;
+            outline: none;
+        }
+        .search-box button {
+            background-color: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 0 18px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .search-box button:hover {
+            background-color: #e85757;
+        }
+
+        /* 나머지 기존 스타일은 유지 */
+        
         .main-content {
             width: 100%;
             height: calc(100% - 100px);
@@ -80,6 +165,30 @@
             overflow: auto;
             padding: 20px;
         }
+        
+        .section {
+		  display: flex;
+		  gap: 20px;
+		  margin-bottom: 40px;
+		  padding: 0 24px; /* 좌우 padding */
+		}
+		
+		.section-row {
+		  flex: 1;
+		  background: #fff;
+		  padding: 24px;
+		  border-radius: 12px;
+		  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		}
+		
+		.section-half {
+		  flex: 1;
+		  background: #fff;
+		  padding: 24px;
+		  border-radius: 12px;
+		  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		}
+        
 
         .search-form button:hover {
 		    background-color: #3e78c2;
@@ -302,14 +411,14 @@
 		    background-color: #f9f9f9;
 		}
 				
-      
     </style>
 </head>
 <body>
-<div class="header">
+    
     <div class="header-line1">
-        <div><a href="/home" class="no-style-link">로고 또는 네비게이션</a></div>
-        <div class="auth-buttons">
+    <div><a href="/home" class="no-style-link">INVEST YATRA</a></div>
+        
+    <div class="auth-links">
             <c:choose>
                 <c:when test="${not empty sessionScope.authInfo}">
                     <c:choose>
@@ -323,61 +432,114 @@
                         </c:when>
                     </c:choose>
                 </c:when>
-                <c:otherwise>
-                    <a href="/login">로그인</a> |
-                    <a href="/member/memberWrite">회원가입</a>
-                </c:otherwise>
-            </c:choose>
-        </div>
-    </div>
+	                <c:otherwise>
+	                    <a href="/login">로그인</a> |
+	                    <a href="/member/memberWrite">회원가입</a>
+	                </c:otherwise>
+	            </c:choose>
+	        </div>
+		</div>
+    
+    
     <div class="header-line2">
-        <div class="nav-search-container">
-            <div class="nav-links">
-                <a href="/news">뉴스</a> |
-                <a href="/stock">인기주식</a> |
-                <a href="/communityMain">토론장</a>
-            </div>
-            <div class="search-box">
-                <form action="/search" method="get">
-                    <input type="text" name="query" placeholder="검색어 입력" />
-                    <button type="submit">🔍</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
- <a href="/stockdata">실시간데이터</a>
+	    <div class="nav-links">
+	        <a href="/news">뉴스</a>
+	        <a href="/stock">인기주식</a>
+	        <a href="/communityMain">토론장</a>
+	    </div>
+	    <div class="search-box">
+	        <form action="/search" method="get" style="display:flex;">
+	            <input type="text" name="query" placeholder="검색어 입력" />
+	            <button type="submit">🔍</button>
+	        </form>
+	    </div>
+	</div>
+
+   <!-- <a href="/stockdata">실시간데이터</a> -->
+   
 <div class="main-content">
-	<h2>📊 기업 리스트</h2>
-<table class="company-table" style="margin-bottom: 30px; margin-left: 80px;" >
-    <thead>
-        <tr >
-        	<th text-align: center;>No.</th>
-            <th text-align: center;>기업명</th>
-            <th text-align: center;>업종</th>
+	<div class="section">
+  <!-- 왼쪽: 기업 리스트 + 인기커뮤니티 -->
+  <div class="section-row">
+    <h2>📊 기업 리스트</h2>
+    <table class="company-table" style="margin-bottom: 30px; width: 100%;">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>기업명</th>
+          <th>업종</th>
         </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
         <c:choose>
-            <c:when test="${not empty companyList}">
-                <c:forEach var="company" items="${companyList}" varStatus="status">
-				    <c:if test="${status.index < 5}">
-				        <tr>
-				 	       <td>${status.index + 1}</td>
-				            <td><a href="/company/${company.companyNum}" class="company-link">${company.companyName}</a></td>
-				            <td>${company.companyType}</td>
-				        </tr>
-				    </c:if>
-				</c:forEach>
-            </c:when>
-            <c:otherwise>
+          <c:when test="${not empty companyList}">
+            <c:forEach var="company" items="${companyList}" varStatus="status">
+              <c:if test="${status.index < 5}">
                 <tr>
-                    <td colspan="5" style="text-align: center;">📭 검색 결과가 없습니다</td>
+                  <td>${status.index + 1}</td>
+                  <td>
+                    <a href="/company/${company.companyNum}" class="company-link">${company.companyName}</a>
+                  </td>
+                  <td>${company.companyType}</td>
                 </tr>
-            </c:otherwise>
+              </c:if>
+            </c:forEach>
+          </c:when>
+          <c:otherwise>
+            <tr>
+              <td colspan="3" style="text-align: center;">📭 검색 결과가 없습니다</td>
+            </tr>
+          </c:otherwise>
         </c:choose>
-    </tbody>
+      </tbody>
+    </table>
+
+    
+  </div>
+
+  <!-- 오른쪽: 실시간 주가 차트 -->
+  <div class="section-half">
+    <h2>📊 인기커뮤니티</h2>
+    <table class="company-table" style="margin-bottom: 30px; width: 100%;">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>제목</th>
+      <th>작성일자</th>
+      <th>좋아요</th>
+    </tr>
+  </thead>
+  <tbody>
+    <c:choose>
+      <c:when test="${not empty list}">
+        <c:forEach var="item" items="${list}" varStatus="status">
+          <c:if test="${status.index < 5}">
+            <tr>
+              <td>${status.index + 1}</td>
+              <td>
+                <a href="detail?commuNum=${item.commuNum}&boardNum=${boardNum}">
+                  ${item.commuSubject}
+                </a>
+              </td>
+              <td>
+                <fmt:formatDate value="${item.commuRegist}" pattern="yyyy-MM-dd"/>
+              </td>
+              <td>${item.commuGood}</td>
+            </tr>
+          </c:if>
+        </c:forEach>
+      </c:when>
+      <c:otherwise>
+        <tr>
+          <td colspan="4" style="text-align: center;">📭 등록된 게시글이 없습니다</td>
+        </tr>
+      </c:otherwise>
+    </c:choose>
+  </tbody>
 </table>
+
+  </div>
+</div>
 
 	
     <h1>뉴스 콘텐츠 영역</h1>   
@@ -419,7 +581,7 @@
         <h2>👤 내 정보</h2>
       <ul style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
           <li><a href="/member/myPage">회원정보</a></li>
-          <li><a href="/myAsset">내 자산</a></li>
+          <li><a href="/member/myAsset">내 자산</a></li>
           <li><a href="/myStoke">보유종목</a></li>
           <li><a href="/wish">관심종목</a></li>
           <li><a href="/inquiry">문의하기</a></li>

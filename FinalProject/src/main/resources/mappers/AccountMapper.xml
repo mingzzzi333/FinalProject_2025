@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="finalProject.mapper.AccountMapper">
+
+    
+    <insert id="insertAccount" parameterType="finalProject.domain.AccountDTO">
+        INSERT INTO ACCOUNT (
+            ACCOUNT_NUM,
+            MEMBER_NUM,
+            ACCOUNT_NAME,
+            ACCOUNT_CASH,
+            ACCOUNT_DATE,
+            ACCOUNT_TYPE
+        )
+        VALUES (
+            #{accountNum},
+            #{memberNum},
+            #{accountName},
+            #{accountCash},
+            SYSDATE,
+            #{accountType, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateAccount" parameterType="finalProject.domain.AccountDTO">
+        UPDATE ACCOUNT
+        SET ACCOUNT_NAME = #{accountName},
+            ACCOUNT_CASH = #{accountCash},
+            ACCOUNT_TYPE = #{accountType}
+        WHERE MEMBER_NUM = #{memberNum}
+    </update>
+    
+    <select id="selectByMemberNum" parameterType="string" resultType="finalProject.domain.AccountDTO">
+        SELECT * FROM ACCOUNT WHERE MEMBER_NUM = #{memberNum}
+    </select>
+    
+
+</mapper>

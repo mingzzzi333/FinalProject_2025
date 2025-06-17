@@ -19,6 +19,49 @@
         .button-box {
             margin-top: 20px;
         }
+        .header-line1 {
+            background: #FF6B6B;
+            color: #fff;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            font-weight: 700;
+            font-size: 28px;
+            letter-spacing: 1.2px;
+        }
+        /* header 내부의 모든 링크에 밑줄 제거 및 흰색 적용 */
+		.header-line1 a {
+		    color: #fff;
+		    text-decoration: none;
+		}
+		
+		.header-line1 a:hover,
+		.header-line1 a:visited,
+		.header-line1 a:active {
+		    color: #fff;
+		    text-decoration: none;
+		}
+        .header-line1 .auth-links {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .header-line1 .auth-links a {
+            color: #fff;
+            margin-left: 16px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .header-line1 .auth-links a:hover {
+            color: #ffc3c3;
+            text-decoration: underline;
+        }
+        
     </style>
 </head>
 <body>

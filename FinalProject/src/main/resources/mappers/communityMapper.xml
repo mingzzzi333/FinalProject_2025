@@ -40,6 +40,7 @@
     WHERE COMMU_NUM = #{commuNum}
   </update>
   
+  <!-- 리스트 -->
   <select id="selectAll" resultType="finalProject.domain.CommunityDTO">
     SELECT 
       COMMU_NUM, BOARD_NUM, EMPLOYEE_NUM, MEMBER_NUM, COMPANY_NUM,
@@ -126,5 +127,17 @@
     WHERE target_type = #{targetType}
       AND target_id = #{targetId}
   </select>
+  <select id="selectTop5ByLikes" resultType="finalProject.domain.CommunityDTO">
+	    SELECT
+	        commu_num AS commuNum,
+	        commu_subject AS commuSubject,
+	        commu_regist AS commuRegist,
+	        commu_good AS commuGood
+	    FROM community
+	    ORDER BY commu_good DESC
+	    FETCH FIRST 5 ROWS ONLY
+	</select>
+
+  
 
 </mapper>

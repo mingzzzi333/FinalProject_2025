@@ -21,4 +21,6 @@ public interface MemberMapper {
     // 회원 수정 (여기 추가됨 ✅)
     void updateMember(MemberDTO memberDTO);
     
+    void updateAccountNumber(String memberNum, String accountNumber);
+    
 }

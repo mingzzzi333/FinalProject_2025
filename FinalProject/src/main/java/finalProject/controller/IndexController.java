@@ -8,15 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import finalProject.domain.AuthInfoDTO;
 import finalProject.domain.BoardDTO;
+import finalProject.domain.CommunityDTO;
 import finalProject.domain.CompanyDTO;
-import finalProject.domain.StockA3;
 import finalProject.mapper.BoardMapper;
 import finalProject.model.NewsArticle;
-import finalProject.repository.StockRepository;
+import finalProject.service.community.CommunityService;
 import finalProject.service.company.CompanyService;
 import finalProject.service.news.NewsCrawlerService;
 import jakarta.servlet.http.HttpSession;
@@ -29,15 +28,26 @@ public class IndexController {
 	BoardMapper boardMapper;
 	@Autowired
 	CompanyService companyService;
-	// index
-	@RequestMapping("/")
-	public String index(Model model) {
+	@Autowired
+	CommunityService communityService;
+
+	// 공통 데이터 설정 메서드
+	private void setCommonIndexData(Model model) {
 		List<NewsArticle> newsList = newsCrawlerService.getAllNews();
-		model.addAttribute("newsList", newsList);
-		List<CompanyDTO> companies = companyService.getAllCompanies(); // 또는 검색결과 등
-		model.addAttribute("companyList", companies);
 		int maxSize = Math.min(newsList.size(), 10);
 		model.addAttribute("newsList", newsList.subList(0, maxSize));
+
+		List<CompanyDTO> companies = companyService.getAllCompanies();
+		model.addAttribute("companyList", companies);
+
+		List<CommunityDTO> popularPosts = communityService.selectTop5ByLikes(); // 인기글
+		model.addAttribute("list", popularPosts);
+	}
+
+	// index (비로그인)
+	@RequestMapping("/")
+	public String index(Model model) {
+		setCommonIndexData(model);
 		return "index";
 	}
 
@@ -50,9 +60,7 @@ public class IndexController {
 	// 일반 회원 로그인 성공 시 이동
 	@GetMapping("/index")
 	public String userMain(Model model) {
-		List<NewsArticle> newsList = newsCrawlerService.getAllNews();
-		int maxSize = Math.min(newsList.size(), 10);
-		model.addAttribute("newsList", newsList.subList(0, maxSize));
+		setCommonIndexData(model);
 		return "index";
 	}
 
@@ -63,27 +71,23 @@ public class IndexController {
 		if (authInfo != null && "emp".equals(authInfo.getGrade())) {
 			model.addAttribute("empNum", authInfo.getUserNum());
 		}
+		setCommonIndexData(model);
 		return "index";
 	}
 
 	// 홈으로 이동
 	@GetMapping("/home")
 	public String home(Model model) {
-		List<NewsArticle> newsList = newsCrawlerService.getAllNews();
-		List<CompanyDTO> companies = companyService.getAllCompanies(); // 또는 검색결과 등
-		model.addAttribute("companyList", companies);
-		// 최대 10개까지만 보여주기
-		int maxSize = Math.min(newsList.size(), 10);
-		model.addAttribute("newsList", newsList.subList(0, maxSize));
+		setCommonIndexData(model);
 		return "index";
 	}
 
 	// 토론장으로 이동
-	@GetMapping("/communityMain") // 또는 "/home", "/community" 등
+	@GetMapping("/communityMain")
 	public String communityMain(Model model) {
-		List<BoardDTO> boardList = boardMapper.selectAllBoards(); // 전체 게시판 목록
+		List<BoardDTO> boardList = boardMapper.selectAllBoards();
 		model.addAttribute("boardList", boardList);
-		return "community/communityAll"; // 이 JSP가 네가 보여주고 싶은 페이지
+		return "community/communityAll";
 	}
 
 	// 뉴스로 이동
@@ -92,11 +96,7 @@ public class IndexController {
 		return "redirect:/news/crawled";
 	}
 
-	// 주식정보로 이동
-	/*
-	 * @GetMapping("/stock") public String stockPage() { return "stock/stockMain"; }
-	 */
-	// 기업리스트
+	// 기업 리스트 페이지
 	@GetMapping("/stock")
 	public String showCompanyList(@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
@@ -117,27 +117,18 @@ public class IndexController {
 		}
 
 		int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-
-		// ✨ 페이징 그룹 계산
 		int startPage = ((page - 1) / pageGroupSize) * pageGroupSize + 1;
-		int endPage = startPage + pageGroupSize - 1;
-		if (endPage > totalPages) {
-			endPage = totalPages;
-		}
-
-		boolean hasPrev = startPage > 1;
-		boolean hasNext = endPage < totalPages;
+		int endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
 
 		model.addAttribute("companyList", companyList);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
-		model.addAttribute("hasPrev", hasPrev);
-		model.addAttribute("hasNext", hasNext);
+		model.addAttribute("hasPrev", startPage > 1);
+		model.addAttribute("hasNext", endPage < totalPages);
 		model.addAttribute("keyword", keyword);
 
 		return "company/companyList";
 	}
 }
-	

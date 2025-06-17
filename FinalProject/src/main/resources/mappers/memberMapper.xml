@@ -55,5 +55,12 @@
   <select id="selectByMemberNum" resultType="finalProject.domain.MemberDTO">
     SELECT * FROM MEMBER WHERE MEMBER_NUM = #{memberNum}
   </select>
+  
+	  <!-- 추가한곳 -->
+	<update id="updateAccountNumber" parameterType="finalProject.domain.MemberDTO">
+	    UPDATE member
+	    SET account_number = #{accountNumber}
+	    WHERE member_num = #{memberNum}
+	</update>
 
 </mapper>

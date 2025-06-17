@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import finalProject.command.MemberCommand;
+import finalProject.domain.AccountDTO;
 import finalProject.domain.AuthInfoDTO;
 import finalProject.domain.MemberDTO;
 import finalProject.service.member.MemberAutoNumService;
 import finalProject.service.member.MemberDetailService;
 import finalProject.service.member.MemberUpdateService;
 import finalProject.service.member.MemberWriteService;
+import finalProject.service.member.MyAssetService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -34,6 +36,8 @@ public class MemberController {
 	MemberDetailService memberDetailService;
 	@Autowired
 	MemberUpdateService memberUpdateService;
+	@Autowired
+	MyAssetService myAssetService;
 	
 	//자동부여
 	@GetMapping("/memberWrite")
@@ -108,6 +112,29 @@ public class MemberController {
 
 	    return "redirect:/member/myPage";  // 수정 후 내 정보 페이지로 이동
 	}
+
+	
+	@GetMapping("/myAsset")
+	   public String myAsset(HttpSession session, Model model) {
+	       AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
+	       if (authInfo == null || !"mem".equals(authInfo.getGrade())) {
+	           return "redirect:/login";
+	       }
+	       AccountDTO account = myAssetService.getAccountInfo(authInfo.getUserNum());
+	       model.addAttribute("account", account);
+	       return "member/myAsset";
+	   }
+	
+	@PostMapping("/myAsset")
+	   public String updateAsset(AccountDTO dto, HttpSession session) {
+	       AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
+	       if (authInfo == null || !"mem".equals(authInfo.getGrade())) {
+	           return "redirect:/login";
+	       }
+	       dto.setMemberNum(authInfo.getUserNum()); // 세션에서 사용자 식별자 추출
+	       myAssetService.saveOrUpdateAccount(dto);
+	       return "redirect:/member/myAsset"; // 저장 후 다시 그 페이지로 이동
+	   }
 
 	
 	
