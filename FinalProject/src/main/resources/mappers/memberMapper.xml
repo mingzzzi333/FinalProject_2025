@@ -20,23 +20,23 @@
   </insert>
 
   <!-- 회원 정보 수정 (추가된 부분) -->
-	<update id="updateMember" parameterType="finalProject.domain.MemberDTO">
-	  UPDATE member
-	  SET
-	    <if test="memberPw != null and memberPw != ''">
-	      MEMBER_PW = #{memberPw},
-	    </if>
-	    MEMBER_NAME = #{memberName},
-	    MEMBER_PHONE = #{memberPhone},
-	    MEMBER_EMAIL = #{memberEmail},
-	    MEMBER_BIRTH = #{memberBirth},
-	    MEMBER_GENDER = #{memberGender},
-	    MEMBER_ADDR = #{memberAddr},
-	    MEMBER_DETAIL_ADDR = #{memberDetailAddr},
-	    MEMBER_POST = #{memberPost},
-	    MEMBER_IMG = #{memberImg, jdbcType=VARCHAR}
-	  WHERE MEMBER_NUM = #{memberNum}
-	</update>
+   <update id="updateMember" parameterType="finalProject.domain.MemberDTO">
+     UPDATE member
+     SET
+       <if test="memberPw != null and memberPw != ''">
+         MEMBER_PW = #{memberPw},
+       </if>
+       MEMBER_NAME = #{memberName},
+       MEMBER_PHONE = #{memberPhone},
+       MEMBER_EMAIL = #{memberEmail},
+       MEMBER_BIRTH = #{memberBirth},
+       MEMBER_GENDER = #{memberGender},
+       MEMBER_ADDR = #{memberAddr},
+       MEMBER_DETAIL_ADDR = #{memberDetailAddr},
+       MEMBER_POST = #{memberPost},
+       MEMBER_IMG = #{memberImg, jdbcType=VARCHAR}
+     WHERE MEMBER_NUM = #{memberNum}
+   </update>
 
   <!-- 번호자동부여 -->
   <select id="memberNumAutoSelect" resultType="String">
@@ -56,11 +56,10 @@
     SELECT * FROM MEMBER WHERE MEMBER_NUM = #{memberNum}
   </select>
   
-	  <!-- 추가한곳 -->
-	<update id="updateAccountNumber" parameterType="finalProject.domain.MemberDTO">
-	    UPDATE member
-	    SET account_number = #{accountNumber}
-	    WHERE member_num = #{memberNum}
-	</update>
+
+<select id="selectById" parameterType="string" resultType="finalProject.domain.MemberDTO">
+  SELECT * FROM MEMBER WHERE MEMBER_ID = #{memberId}
+</select>
+
 
 </mapper>

@@ -5,22 +5,26 @@
 
 <mapper namespace="finalProject.mapper.EmployeeMapper">
 
-  <select id="getLastEmployeeNum" resultType="String">
-    SELECT MAX(EMPLOYEE_NUM) FROM EMPLOYEE
-  </select>
 
   <insert id="insertEmployee" parameterType="finalProject.domain.EmployeeDTO">
   INSERT INTO EMPLOYEE (
     EMPLOYEE_NUM, EMPLOYEE_ID, EMPLOYEE_PW, EMPLOYEE_NAME,
     EMPLOYEE_PHONE, EMPLOYEE_EMAIL, EMPLOYEE_ADDR, EMPLOYEE_POST,
-    EMPLOYEE_HIRE_DATE, EMPLOYEE_IMG
+    EMPLOYEE_HIRE_DATE
   )
   VALUES (
     #{employeeNum}, #{employeeId}, #{employeePw}, #{employeeName},
     #{employeePhone}, #{employeeEmail}, #{employeeAddr}, #{employeePost},
-    #{employeeHireDate}, #{employeeImg}
+    #{employeeHireDate}
   )
 </insert>
+<select id="getLastEmployeeNum" resultType="String">
+    SELECT employee_num
+    FROM employee
+    WHERE employee_num LIKE 'EMP_%'
+    ORDER BY TO_NUMBER(SUBSTR(employee_num, 5)) DESC
+    FETCH FIRST 1 ROWS ONLY
+</select>
 
 
 </mapper>

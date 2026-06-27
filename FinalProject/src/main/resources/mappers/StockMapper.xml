@@ -12,12 +12,12 @@
             s.CUMULATIVE_VOLUME AS cumulativeVolume,  
             s.PRICE AS price,  
             s.SYMBOL AS symbol
-        FROM stock s
+        FROM stockdata s
         JOIN (
             SELECT  
                 TRUNC(TRADING_DATE) AS TRADING_DATE,  
                 MAX(CUMULATIVE_VOLUME) AS MAX_CUMULATIVE_VOLUME
-            FROM stock
+            FROM stockdata
             WHERE TRUNC(TRADING_DATE) != TRUNC(SYSDATE)
             GROUP BY TRUNC(TRADING_DATE)
         ) max_values
@@ -34,10 +34,28 @@
                        PARTITION BY TO_CHAR(trading_date, 'yyyy-MM-dd'), trading_hours
                        ORDER BY TO_CHAR(trading_date, 'yyyy-MM-dd') DESC, trading_hours DESC, ROWID DESC
                    ) AS rn
-            FROM stock s
+            FROM stockdata s
             WHERE TRUNC(trading_date) = TRUNC(SYSDATE)
         )
         WHERE rn = 1
     </select>
+    
+    <select id="selectLatestStockData" resultType="finalProject.domain.StockA3">
+        SELECT 
+            trading_date AS tradingDate,
+            trading_hours AS tradingHours,
+            symbol,
+            price,
+            volume,
+            cumulative_volume AS cumulativeVolume,
+            high_price AS highPrice,
+            low_price AS lowPrice
+        FROM stockdata
+        WHERE symbol = #{stockName}
+        ORDER BY trading_date DESC, trading_hours DESC
+        FETCH FIRST 1 ROWS ONLY
+    </select>
+    
+
 
 </mapper>

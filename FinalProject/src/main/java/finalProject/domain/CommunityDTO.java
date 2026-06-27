@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 import lombok.Data;
+import lombok.ToString;
 
 @Alias("commu")
 @Data
+@ToString
 public class CommunityDTO {
     private int commuNum;       
     private Integer boardNum;     
@@ -18,13 +20,12 @@ public class CommunityDTO {
     
     private String commuWriter;
 
+
     private Date commuRegist;
     private Date commuUpdate;
     private String commuSubject;
     private String commuContents;
 
-    private String commuOriginalName;
-    private String commuStoreName;
     private String commuImageOriginalName;
     private String commuImageStoreName;
     

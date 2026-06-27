@@ -5,16 +5,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import finalProject.domain.StockA3;
 import finalProject.repository.StockRepository;
+import finalProject.service.stock.StockService;
 
 @Controller
 public class StockController {
 	@Autowired
 	StockRepository stockRepository;
+	@Autowired
+    StockService stockService;
 		
 	
 	@GetMapping("/stockdata")

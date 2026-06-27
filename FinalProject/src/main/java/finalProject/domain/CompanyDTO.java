@@ -1,6 +1,6 @@
 package finalProject.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class CompanyDTO {
 
@@ -24,6 +24,17 @@ public class CompanyDTO {
     private String industry;      // 업종코드 원본 문자열 (industryCode)
 
     // Getter와 Setter 메서드
+    
+ // finalProject.domain.CompanyDTO
+    private boolean wished;
+
+    public boolean isWished() {
+        return wished;
+    }
+
+    public void setWished(boolean wished) {
+        this.wished = wished;
+    }
 
     public String getCompanyNum() {
         return companyNum;

@@ -7,10 +7,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>직원 등록</title>
+  <title>관리자 뉴스 관리 페이지</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
-  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  <script type="text/javascript" src="/static/js/daumAddressScript.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
 
@@ -95,162 +93,171 @@
         padding: 30px;
     }
 
-    /* 직원등록 페이지 전용 스타일 */
-    .employee-container {
-        max-width: 800px;
+    /* 관리자 페이지 전용 스타일 */
+    .admin-container {
+        max-width: 1200px;
         margin: 0 auto;
         padding: 0 24px;
     }
 
-    .page-header {
+    .admin-header {
         text-align: center;
         margin-bottom: 40px;
-        padding: 20px 0;
+        padding: 40px 0;
     }
 
-    .page-header h1 {
+    .admin-header h1 {
         color: #444;
-        font-size: 32px;
+        font-size: 36px;
         font-weight: 700;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         letter-spacing: 1px;
     }
 
-    .page-header p {
+    .admin-header p {
         color: #666;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 500;
     }
 
-    .form-container {
-        background: #fff;
-        padding: 40px;
-        border-radius: 16px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        border: 2px solid #f0f0f0;
-    }
-
-    .form-table {
-        width: 100%;
-        border-collapse: collapse;
+    /* 뉴스 관리 전용 스타일 */
+    .news-header {
+        text-align: center;
         margin-bottom: 30px;
     }
 
-    .form-table th {
-        background: #f8f9fa;
+    .news-header h1 {
         color: #444;
-        font-weight: 600;
-        padding: 16px 20px;
-        text-align: left;
-        border: 1px solid #e9ecef;
-        width: 140px;
-        font-size: 14px;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 10px;
     }
 
-    .form-table td {
-        padding: 16px 20px;
-        border: 1px solid #e9ecef;
-        background: #fff;
-    }
-
-    .form-table input[type="text"],
-    .form-table input[type="password"],
-    .form-table input[type="email"],
-    .form-table input[type="date"],
-    .form-table input[type="file"] {
-        width: 100%;
-        padding: 12px 16px;
-        border: 2px solid #e9ecef;
+    .page-info {
+        margin-bottom: 15px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #555;
+        text-align: center;
+        background: #f8f9fa;
+        padding: 15px;
         border-radius: 8px;
-        font-size: 14px;
-        font-family: 'Montserrat', sans-serif;
-        transition: all 0.3s ease;
-        box-sizing: border-box;
     }
 
-    .form-table input[type="text"]:focus,
-    .form-table input[type="password"]:focus,
-    .form-table input[type="email"]:focus,
-    .form-table input[type="date"]:focus {
-        border-color: #444;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(68, 68, 68, 0.1);
-    }
-
-    .form-table input[readonly] {
-        background-color: #f8f9fa;
-        color: #6c757d;
-        cursor: not-allowed;
-    }
-
-    .address-group {
+    /* 뉴스 아이템 스타일 */
+    .news-container {
         display: flex;
-        align-items: center;
-        gap: 12px;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 30px;
     }
 
-    .address-input {
-        flex: 1;
+    .news-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
     }
 
-    .address-btn {
+    .news-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+        border-color: #444;
+    }
+
+    .news-index {
         background: #444;
         color: #fff;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: 700;
         font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        white-space: nowrap;
+        flex-shrink: 0;
     }
 
-    .address-btn:hover {
-        background: #BFBFBF;
+    .news-image {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .news-content {
+        flex: 1;
+        min-height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .news-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin: 0 0 10px 0;
+        line-height: 1.4;
+    }
+
+    /* 페이지네이션 스타일 */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+    }
+
+    .page-link {
+        display: inline-block;
+        padding: 10px 16px;
+        text-decoration: none;
+        color: #555;
+        background: #fff;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .page-link:hover {
+        background: #f8f9fa;
+        border-color: #444;
+        color: #444;
         transform: translateY(-1px);
     }
 
-    .button-group {
+    /* 데이터 없을 때 */
+    .no-data {
         text-align: center;
-        padding: 20px 0;
+        padding: 60px 20px;
+        color: #666;
+        font-size: 18px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin: 20px 0;
     }
 
-    .submit-btn,
-    .list-btn {
-        display: inline-block;
-        padding: 14px 32px;
-        margin: 0 8px;
-        border: none;
-        border-radius: 25px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .submit-btn {
-        background: #444;
-        color: #fff;
-    }
-
-    .submit-btn:hover {
-        background: #333;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    .list-btn {
-        background: #BFBFBF;
-        color: #fff;
-    }
-
-    .list-btn:hover {
-        background: #a0a0a0;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(191, 191, 191, 0.3);
+    .no-data::before {
+        content: "📰";
+        display: block;
+        font-size: 48px;
+        margin-bottom: 20px;
     }
 
     /* 슬라이딩 패널 및 오버레이 */
@@ -329,22 +336,39 @@
 
     /* 반응형 디자인 */
     @media (max-width: 768px) {
-        .form-container {
-            padding: 24px;
-        }
-        
-        .form-table th,
-        .form-table td {
-            padding: 12px 16px;
-        }
-        
-        .address-group {
+        .header-line1 {
             flex-direction: column;
-            align-items: stretch;
+            gap: 10px;
+            text-align: center;
         }
         
-        .address-btn {
-            margin-top: 8px;
+        .header-line2 {
+            padding: 12px 20px;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .news-item {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .news-image {
+            width: 100%;
+            height: 200px;
+        }
+        
+        .pagination {
+            gap: 4px;
+        }
+        
+        .page-link {
+            padding: 8px 12px;
+            font-size: 12px;
         }
     }
   </style>
@@ -372,9 +396,6 @@
             </c:when>
           </c:choose>
         </c:when>
-        <c:otherwise>
-          <a href="/login">로그인</a>
-        </c:otherwise>
       </c:choose>
     </div>
   </div>
@@ -400,65 +421,67 @@
 
 <!-- 본문 영역 -->
 <div class="main-content">
-  <div class="employee-container">
-    <!-- 페이지 헤더 -->
-    <div class="page-header">
-      <h1>👨‍💼 직원 등록</h1>
-      <p>새로운 직원의 정보를 등록하세요</p>
+  <div class="admin-container">
+    <!-- 뉴스 관리 헤더 -->
+    <div class="news-header">
+      <h1>경제 뉴스</h1>
+    </div>
+    
+    <div class="page-info">
+      현재 페이지: ${currentPage} / 전체 페이지: ${totalPages}
     </div>
 
-    <!-- 등록 폼 -->
-    <div class="form-container">
-      <form action="employeeWrite" method="post" enctype="multipart/form-data">
-        <table class="form-table">
-          <tr>
-            <th>직원번호</th>
-            <td><input type="text" name="empNum" value="${employeeNum}" readonly /></td>
-          </tr>
-          <tr>
-            <th>아이디</th>
-            <td><input type="text" name="empId" placeholder="직원 아이디를 입력하세요" required /></td>
-          </tr>
-          <tr>
-            <th>비밀번호</th>
-            <td><input type="password" name="empPw" placeholder="비밀번호를 입력하세요" required /></td>
-          </tr>
-          <tr>
-            <th>이름</th>
-            <td><input type="text" name="empName" placeholder="직원 이름을 입력하세요" required /></td>
-          </tr>
-          <tr>
-            <th>연락처</th>
-            <td><input type="text" name="empPhone" placeholder="연락처를 입력하세요 (예: 010-1234-5678)" /></td>
-          </tr>
-          <tr>
-            <th>이메일</th>
-            <td><input type="email" name="empEmail" placeholder="이메일을 입력하세요" /></td>
-          </tr>
-          <tr>
-            <th>주소</th>
-            <td>
-              <div class="address-group">
-                <input type="text" name="empAddr" id="sample4_roadAddress" class="address-input" placeholder="주소 검색 버튼을 클릭하세요" readonly />
-                <button type="button" class="address-btn" onclick="execDaumPostcode();">주소검색</button>
+    <c:choose>
+      <c:when test="${not empty newsList}">
+        <div class="news-container">
+          <c:forEach var="news" items="${newsList}" varStatus="status">
+            <div class="news-item" onclick="window.open('${news.link}', '_blank')">
+              <div class="news-index">
+                ${ (currentPage - 1) * pageSize + status.index + 1 }
               </div>
-            </td>
-          </tr>
-          <tr>
-            <th>우편번호</th>
-            <td><input type="text" name="empPost" id="sample4_postcode" placeholder="우편번호가 자동으로 입력됩니다" readonly /></td>
-          </tr>
-          <tr>
-            <th>입사일</th>
-            <td><input type="date" name="empHireDate" required /></td>
-          </tr>
-        </table>
-        
-        <div class="button-group">
-          <input type="submit" value="✅ 등록하기" class="submit-btn" />
-          <input type="button" value="📋 목록으로" class="list-btn" onclick="javascript:location.href='employeeList'" />
+              <img class="news-image" src="${news.imageUrl}" alt="뉴스 이미지" />
+              <div class="news-content">
+                <h3 class="news-title" title="${news.title}">
+                  <c:choose>
+                    <c:when test="${fn:length(news.title) > 40}">
+                      ${fn:substring(news.title, 0, 40)}...
+                    </c:when>
+                    <c:otherwise>
+                      ${news.title}
+                    </c:otherwise>
+                  </c:choose>
+                </h3>
+                <div>
+                  <p style="font-size: 12px; color: #999;">작성일: ${news.pubDate}</p>
+                </div>
+              </div>
+            </div>
+          </c:forEach>
         </div>
-      </form>
+      </c:when>
+      <c:otherwise>
+        <div class="no-data">
+          <p>뉴스 데이터를 불러올 수 없습니다.</p>
+        </div>
+      </c:otherwise>
+    </c:choose>
+
+    <!-- 페이지 네비게이션 바 -->
+    <div class="pagination">
+      <c:if test="${currentPage > 1}">
+        <a href="/news/crawled?page=${currentPage - 1}" class="page-link">이전</a>
+      </c:if>
+
+      <c:forEach begin="1" end="${totalPages}" var="i">
+        <a href="/news/crawled?page=${i}" class="page-link"
+           style="${i == currentPage ? 'background-color: #800080; color: white; font-weight: bold;' : ''}">
+           ${i}
+        </a>
+      </c:forEach>
+
+      <c:if test="${currentPage < totalPages}">
+        <a href="/news/crawled?page=${currentPage + 1}" class="page-link">다음</a>
+      </c:if>
     </div>
   </div>
 </div>
@@ -490,25 +513,6 @@ function closeMyPage() {
     document.getElementById("myPagePanel").classList.remove("open");
     document.getElementById("overlay").style.display = "none";
 }
-
-// 폼 유효성 검사
-document.querySelector('form').addEventListener('submit', function(e) {
-    const empId = document.querySelector('input[name="empId"]').value.trim();
-    const empPw = document.querySelector('input[name="empPw"]').value.trim();
-    const empName = document.querySelector('input[name="empName"]').value.trim();
-    
-    if (!empId || !empPw || !empName) {
-        alert('필수 항목을 모두 입력해주세요.');
-        e.preventDefault();
-        return false;
-    }
-    
-    if (empPw.length < 6) {
-        alert('비밀번호는 6자 이상 입력해주세요.');
-        e.preventDefault();
-        return false;
-    }
-});
 </script>
 </body>
 </html>

@@ -15,5 +15,7 @@ public interface StockMapper {
 
     // 당일 시간별 실시간 데이터 (최신값만)
     List<StockA3> stockCurrentSelect();
+    
+    StockA3 selectLatestStockData(@Param("stockName") String stockName);
 }
 

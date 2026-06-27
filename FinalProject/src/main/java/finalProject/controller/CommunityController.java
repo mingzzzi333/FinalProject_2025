@@ -1,5 +1,6 @@
 package finalProject.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,9 +101,33 @@ public class CommunityController {
         model.addAttribute("boardNum", boardNum);
 
         List<CommunityCommentDTO> commentList = commentMapper.selectCommentsByCommuNum(commuNum);
-        model.addAttribute("commentList", commentList);
+        Map<String, Object> structuredComments = getStructuredComments(commentList);
+        model.addAttribute("parentComments", structuredComments.get("parentComments"));
+        model.addAttribute("repliesMap", structuredComments.get("repliesMap"));
 
         return "community/communityDetail";
+    }
+
+    // 댓글 구조화 (부모 댓글 + 답글 맵)
+    private Map<String, Object> getStructuredComments(List<CommunityCommentDTO> comments) {
+        List<CommunityCommentDTO> parentComments = new ArrayList<>();
+        Map<Integer, List<CommunityCommentDTO>> repliesMap = new HashMap<>();
+
+        for (CommunityCommentDTO comment : comments) {
+            Integer parentId = comment.getParentCommentNum();
+
+            if (parentId == null || parentId == 0) {
+                parentComments.add(comment);
+            } else {
+                repliesMap.computeIfAbsent(parentId, k -> new ArrayList<>()).add(comment);
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("parentComments", parentComments);
+        result.put("repliesMap", repliesMap);
+
+        return result;
     }
 
     // 좋아요 토글
@@ -160,7 +185,6 @@ public class CommunityController {
 
         return result;
     }
-
     // 수정 폼
     @GetMapping("/edit/{commuNum}")
     public String editForm(@PathVariable("commuNum") int commuNum, Model model) {
@@ -186,5 +210,15 @@ public class CommunityController {
     }
     
     
-    
+    // === 새로 추가된 댓글 수정 처리 ===
+    @PostMapping("/comment/update")
+    public String commentUpdate(@ModelAttribute CommunityCommentDTO commentDTO, HttpSession session) {
+        AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
+        if (authInfo == null) return "redirect:/login";
+
+        // 권한 검사 등 추가 가능
+        commentMapper.updateComment(commentDTO);
+
+        return "redirect:/community/detail?commuNum=" + commentDTO.getCommuNum();
+    }
 }

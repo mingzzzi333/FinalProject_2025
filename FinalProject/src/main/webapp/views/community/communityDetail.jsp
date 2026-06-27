@@ -56,11 +56,6 @@
             color: #ffc3c3;
             text-decoration: underline;
         }
-        
-        .no-style-link {
-            color: #fff;
-            text-decoration: none;
-        }
 
         .header-line2 {
             background: #ffe5e5;
@@ -295,7 +290,7 @@
 <body>
 
 <div class="header-line1">
-    <div><a href="/home" class="no-style-link">INVEST YATRA</a></div>
+    <a href="/home" style="color: inherit; text-decoration: none;">INVEST YATRA</a>
     <div class="auth-links">
         <c:choose>
             <c:when test="${not empty authInfo}">
@@ -335,17 +330,25 @@
             조회수: ${commu.commuViews} |
             좋아요: <span id="likeCount-${commu.commuNum}">${commu.commuGood}</span>개
         </div>
-        <div class="post-content">
-            ${commu.commuContents}
-
-            <!-- 이미지 표시 -->
-            <c:if test="${not empty commu.commuImageStoreName}">
-                <img src="/community/images/${commu.commuImageStoreName}"
-                     alt="${commu.commuImageOriginalName}" />
-            </c:if>
-        </div>
+         <div class="post-content">
+                <pre>${commu.commuContents}</pre>
+            
+             <!-- 이미지 출력 -->
+<!-- 이미지가 있을 경우 출력 -->
+<c:if test="${not empty commu.commuImageStoreName}">
+    <div style="margin-top: 20px;">
+    📎 이미지 첨부:
+            
+        <img src="${pageContext.request.contextPath}/upload/${commu.commuImageStoreName}" 
+             alt="첨부 이미지" 
+             style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px;" />
+        
     </div>
+</c:if>
 
+         </div>
+
+        
     <!-- 2. 좋아요 버튼 (가운데 정렬, 개수 포함) -->
     <div class="like-section">
         <button id="likeBtn-${commu.commuNum}" class="like-btn" onclick="toggleLike(${commu.commuNum})">
@@ -375,26 +378,246 @@
     </div>
 
     <!-- 5. 두 번째 핑크색 구분선 -->
-    <div class="comment-section">
-        <h4>댓글</h4>
-        <c:forEach var="comment" items="${commentList}">
-            <div class="comment">
-                <strong>${comment.memberName}</strong>
-                <span class="comment-date">
-                    <fmt:formatDate value="${comment.commentDate}" pattern="yyyy-MM-dd HH:mm"/>
-                </span>
-                <p>${comment.commentContents}</p>
+    <!-- 댓글 영역 -->
+<div class="comment-section">
+    <h4>댓글</h4>
+
+    <!-- 댓글 작성 폼 -->
+    <c:if test="${not empty authInfo}">
+        <div class="comment-form" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <form action="/community/commentInsert" method="post">
+                <input type="hidden" name="commuNum" value="${commu.commuNum}" />
+                <textarea name="commentContents" rows="4" 
+                         style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; resize: vertical;" 
+                         placeholder="댓글을 입력하세요" required></textarea>
+                <div style="margin-top: 10px; text-align: right;">
+                    <button type="submit" 
+                            style="background-color: #ff6b6b; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer;">
+                        댓글 등록
+                    </button>
+                </div>
+            </form>
+        </div>
+    </c:if>
+    
+    <!-- 로그인하지 않은 경우 안내 메시지 -->
+    <c:if test="${empty authInfo}">
+        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <p style="margin: 0; color: #856404;">댓글을 작성하려면 <a href="/login" style="color: #ff6b6b;">로그인</a>이 필요합니다.</p>
+        </div>
+    </c:if>
+
+<!-- 댓글 목록 -->
+<c:forEach var="comment" items="${parentComments}">
+    <div class="comment">
+        <strong>${comment.memberName}</strong>
+        <span class="comment-date">
+            <fmt:formatDate value="${comment.commentDate}" pattern="yyyy-MM-dd HH:mm"/>
+        </span>
+        <p>${comment.commentContents}</p>
+
+        <!-- 수정/삭제/답글 버튼 -->
+        <div class="comment-actions" style="margin-top: 10px;">
+            <c:if test="${not empty authInfo and authInfo.userNum == comment.memberNum}">
+                <button type="button" 
+<%--                 onclick="location.href='/community/commentEdit/${comment.commentNum}'"  --%>
+                  onclick="toggleUpdateForm(${comment.commentNum})"
+             style="background: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-right: 5px;">
+             수정
+            </button>
+
+                <form action="/community/commentDelete" method="post" style="display:inline;">
+                    <input type="hidden" name="commentNum" value="${comment.commentNum}" />
+                    <input type="hidden" name="commuNum" value="${commu.commuNum}" />
+                    <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');"
+                            style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+                        삭제
+                    </button>
+                </form>
+            </c:if>
+            <!-- 답글 버튼 (로그인한 사용자만 보이도록) -->
+            <c:if test="${not empty authInfo}">
+                <button type="button" onclick="toggleReplyForm(${comment.commentNum})" 
+                        style="background: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-left: 5px;">
+                    답글
+                </button>
+            </c:if>
+        </div>
+        <!-- 수정폼 -->
+        <c:if test="${not empty authInfo}">
+        <div id="updateForm-${comment.commentNum}" class="comment-form" style="display:none; background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <form action="/community/commentUpdate" method="post">
+             <input type="hidden" name="commuNum" value="${commu.commuNum}" />
+             <input type="hidden" name="commentNum" value="${comment.commentNum}" />
+             <textarea name="commentContents" rows="4"
+                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"
+                    required>${comment.commentContents}</textarea>
+             <div style="margin-top: 10px; text-align: right;">
+                 <button type="submit"
+                   style="background-color: #ff6b6b; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer;">
+                  수정완료
+                 </button>
+             </div>
+      </form>
+
+        </div>
+    </c:if>
+        
+        <!-- 대댓글 작성 폼 -->
+        <c:if test="${not empty authInfo}">
+            <div id="replyForm-${comment.commentNum}" style="display:none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <form action="/community/commentReplyWrite" method="post">
+                    <input type="hidden" name="commuNum" value="${commu.commuNum}" />
+                    <input type="hidden" name="parentCommentNum" value="${comment.commentNum}" />
+                    <input type="hidden" name="memberNum" value="${authInfo.userNum}" />
+                    <textarea name="commentContents" rows="3" 
+                             style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; resize: vertical;" 
+                             placeholder="답글을 입력하세요" required></textarea>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <button type="button" onclick="toggleReplyForm(${comment.commentNum})" 
+                                style="background: #6c757d; color: white; border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer; margin-right: 5px;">
+                            취소
+                        </button>
+                        <button type="submit" 
+                                style="background: #28a745; color: white; border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer;">
+                            답글 등록
+                        </button>
+                    </div>
+                </form>
             </div>
-        </c:forEach>
+        </c:if>
+        
     </div>
 
+    <!-- 해당 댓글의 답글들 출력 -->
+    <c:if test="${not empty repliesMap[comment.commentNum]}">
+        <c:forEach var="reply" items="${repliesMap[comment.commentNum]}">
+            <div class="comment reply" style="margin-left: 30px; margin-top: 10px; background: #f0f0f0;">
+                <strong>↳ ${reply.memberName}</strong>
+                <span class="comment-date">
+                    <fmt:formatDate value="${reply.commentDate}" pattern="yyyy-MM-dd HH:mm"/>
+                </span>
+                <p>${reply.commentContents}</p>
+
+                <!-- 대댓글 수정/삭제 버튼 -->
+                <div class="comment-actions" style="margin-top: 10px;">
+                    <c:if test="${not empty authInfo and authInfo.userNum == reply.memberNum}">
+                         <button type="button" onclick="replyupdateForm(${reply.commentNum})"
+                                style="background: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-right: 5px;">
+                            수정
+                        </button>
+                        <form action="/community/commentDelete" method="post" style="display:inline;">
+                            <input type="hidden" name="commentNum" value="${reply.commentNum}" />
+                            <input type="hidden" name="commuNum" value="${commu.commuNum}" />
+                            <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');"
+                                    style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+                                삭제
+                            </button>
+                        </form>
+                    </c:if>
+                </div>
+                  <!-- 대댓글 작성 폼 대댓글의 수정폼 -->
+              <!-- 대댓글 수정 폼 -->
+            <c:if test="${not empty authInfo}">
+                <div id="replyupdateForm-${reply.commentNum}" style="display:none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                 <form action="/community/commentUpdate" method="post">
+            
+                  <input type="hidden" name="commentNum" value="${reply.commentNum}" />
+                  <input type="hidden" name="commuNum" value="${commu.commuNum}" />
+            
+               <!-- 댓글 수정 내용 -->
+                  <textarea name="commentContents" rows="3" 
+                      style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; resize: vertical;" 
+                      required>${reply.commentContents}</textarea>
+
+                    <div style="text-align: right; margin-top: 8px;">
+                      <button type="button" onclick="replyupdateForm(${reply.commentNum})" 
+                        style="background: #6c757d; color: white; border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer; margin-right: 5px;">
+                       취소
+                      </button>
+                      <button type="submit" 
+                           style="background: #28a745; color: white; border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer;">
+                       답글 수정
+                         </button>
+                  </div>
+              </form>
+          </div>
+      </c:if>
+            </div>
+        </c:forEach>
+    </c:if>
+    
+    
+</c:forEach>
+    
+    <!-- 댓글이 없는 경우 -->
+    <c:if test="${empty commentList}">
+        <div style="text-align: center; padding: 30px; color: #999;">
+            <p>첫 댓글을 작성해보세요!</p>
+        </div>
+    </c:if>
+</div>
     <!-- 숨겨진 필드: commuNum -->
+    
     <input type="hidden" id="commuNum" value="${commu.commuNum}"/>
 
 </div>
 
 <!-- JavaScript: 좋아요 토글 및 상태 로드 -->
 <script>
+
+   function replyupdateForm(commentNum) {
+      const form = document.getElementById('replyupdateForm-' + commentNum);
+      if (form) {
+          if (form.style.display === 'none' || form.style.display === '') {
+              form.style.display = 'block';
+          } else {
+           form.style.display = 'none';
+          }
+      }
+   }
+
+   function toggleUpdateForm(commentNum) {
+      const form = document.getElementById('updateForm-' + commentNum);
+      if (form) {
+          if (form.style.display === 'none' || form.style.display === '') {
+              form.style.display = 'block';
+          } else {
+           form.style.display = 'none';
+          }
+      }
+   }
+   function toggleReplyForm(commentNum) {
+       const form = document.getElementById('replyForm-' + commentNum);
+       if (form) {
+           if (form.style.display === 'none' || form.style.display === '') {
+               form.style.display = 'block';
+           } else {
+            form.style.display = 'none';
+           }
+       }
+   }
+
+   const currentCommuNum = ${commu.commuNum};  // 게시글 번호 JS 변수
+
+    function showEditForm(commentNum) {
+        const commentDiv = document.getElementById('comment-' + commentNum);
+        const originalContent = commentDiv.querySelector('.comment-content').innerText;
+
+        commentDiv.innerHTML = `
+            <form method="post" action="/community/commentUpdate">
+                <input type="hidden" name="commentNum" value="${commentNum}">
+                <input type="hidden" name="commuNum" value="${currentCommuNum}">
+                <textarea name="commentContents">${originalContent}</textarea>
+                <button type="submit">수정 완료</button>
+                <button type="button" onclick="cancelEdit(${commentNum})">취소</button>
+            </form>
+        `;
+    }
+
+    function cancelEdit(commentNum) {
+        location.reload();
+    }
     // 좋아요 토글 함수
     function toggleLike(commuNum) {
         $.ajax({
@@ -452,6 +675,12 @@
             loadLikeStatus(commuNum);
         }
     });
+    
+
+      function cancelEdit(commentNum) {
+        document.getElementById(`editForm-${commentNum}`).style.display = 'none';
+        document.querySelector(`#comment-${commentNum} .content`).style.display = 'block';
+      }
 </script>
 
 </body>

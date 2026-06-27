@@ -28,116 +28,103 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/member")
 
 public class MemberController {
-	@Autowired
-	MemberWriteService memberWriteService;
-	@Autowired
-	MemberAutoNumService memberAutoNumService;
-	@Autowired
-	MemberDetailService memberDetailService;
-	@Autowired
-	MemberUpdateService memberUpdateService;
-	@Autowired
+   @Autowired
+   MemberWriteService memberWriteService;
+   @Autowired
+   MemberAutoNumService memberAutoNumService;
+   @Autowired
+   MemberDetailService memberDetailService;
+   @Autowired
+   MemberUpdateService memberUpdateService;
+   @Autowired
 	MyAssetService myAssetService;
-	
-	//자동부여
-	@GetMapping("/memberWrite")
-	public String write(Model model) {
-		memberAutoNumService.execute(model);
-		return "member/memberForm";
-	}
-	
-	
-	
-	//회원가입
-	@PostMapping("/memberWrite")
-	public String write(MemberCommand memberCommand, @ModelAttribute MemberDTO memberDTO) {
-		memberWriteService.execute(memberCommand);
-		MultipartFile file = memberDTO.getMemberImgFile();
-			    
-			    if (!file.isEmpty()) {
-			        String originalName = file.getOriginalFilename();
-			        String storeName = UUID.randomUUID().toString() + "_" + originalName;
-			        File dest = new File("C:/upload/" + storeName);
-			        
-			        try {
-			            file.transferTo(dest);
-			            memberDTO.setMemberImg(storeName); // DB에 저장할 파일명 설정
-			        } catch (IOException e) {
-			            e.printStackTrace();
-			        }
-			    }
-		return "login/login";
-	}
-	
-	//회원정보 상세보기
-	@GetMapping("/myPage")
-	   public String myPage(HttpSession session, Model model) {
-	       AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
-	       if (authInfo == null || !"mem".equals(authInfo.getGrade())) {
-	           return "redirect:/login";
-	       }
-	       model.addAttribute("memberInfo", memberDetailService.getMemberInfo(authInfo.getUserNum()));
-	       return "member/myPage"; 
-	   }
-	
-	// 회원정보 수정 폼 보여주기
-	@GetMapping("/memberEdit")
-	public String memberEditForm(HttpSession session, Model model) {
-	    AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
-	    if (authInfo == null) {
-	        return "redirect:/login";
-	    }
+   
+   //자동부여
+   @GetMapping("/memberWrite")
+   public String write(Model model) {
+      memberAutoNumService.execute(model);
+      return "member/memberForm";
+   }
+   
+   
+   
+   //회원가입
+   @PostMapping("/memberWrite")
+   public String write(MemberCommand memberCommand, @ModelAttribute MemberDTO memberDTO) {
+      memberWriteService.execute(memberCommand);
+      MultipartFile file = memberDTO.getMemberImgFile();
+             
+             if (!file.isEmpty()) {
+                 String originalName = file.getOriginalFilename();
+                 String storeName = UUID.randomUUID().toString() + "_" + originalName;
+                 File dest = new File("C:/upload/" + storeName);
+                 
+                 try {
+                     file.transferTo(dest);
+                     memberDTO.setMemberImg(storeName); // DB에 저장할 파일명 설정
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+             }
+      return "login/login";
+   }
+   
+   //회원정보 상세보기
+   @GetMapping("/myPage")
+      public String myPage(HttpSession session, Model model) {
+          AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
+          if (authInfo == null || !"mem".equals(authInfo.getGrade())) {
+              return "redirect:/login";
+          }
+          model.addAttribute("memberInfo", memberDetailService.getMemberInfo(authInfo.getUserNum()));
+          return "member/myPage"; 
+      }
+   
+   // 회원정보 수정 폼 보여주기
+   @GetMapping("/memberEdit")
+   public String memberEditForm(HttpSession session, Model model) {
+       AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
+       if (authInfo == null) {
+           return "redirect:/login";
+       }
 
-	    // 회원정보 조회
-	    MemberDTO dto = memberDetailService.getMemberInfo(authInfo.getUserNum());
-	    model.addAttribute("memberInfo", dto);  // memberEdit.jsp로 전달
-	    return "member/memberEdit";  // memberEdit.jsp 파일로 이동
-	}
+       // 회원정보 조회
+       MemberDTO dto = memberDetailService.getMemberInfo(authInfo.getUserNum());
+       model.addAttribute("memberInfo", dto);  // memberEdit.jsp로 전달
+       return "member/memberEdit";  // memberEdit.jsp 파일로 이동
+   }
 
-	// 회원정보 수정 처리
-	@PostMapping("/memberUpdate")
-	public String memberUpdate(@ModelAttribute MemberDTO memberDTO,
-	                           HttpSession session,
-	                           Model model) {
-	    AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
-	    if (authInfo == null) {
-	        return "redirect:/login";
-	    }
+   // 회원정보 수정 처리
+   @PostMapping("/memberUpdate")
+   public String memberUpdate(@ModelAttribute MemberDTO memberDTO,
+                              HttpSession session,
+                              Model model) {
+       AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
+       if (authInfo == null) {
+           return "redirect:/login";
+       }
 
-	    // 세션에 있는 회원번호로 고정
-	    memberDTO.setMemberNum(authInfo.getUserNum());
+       // 세션에 있는 회원번호로 고정
+       memberDTO.setMemberNum(authInfo.getUserNum());
 
-	    // 수정 서비스 실행
-	    memberUpdateService.execute(memberDTO);
+       // 수정 서비스 실행
+       memberUpdateService.execute(memberDTO);
 
-	    return "redirect:/member/myPage";  // 수정 후 내 정보 페이지로 이동
-	}
+       return "redirect:/member/myPage";  // 수정 후 내 정보 페이지로 이동
+   }
+   @GetMapping("/myAsset")
+   public String myAsset(HttpSession session, Model model) {
+       AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
+       if (authInfo == null || !"mem".equals(authInfo.getGrade())) {
+           return "redirect:/login";
+       }
+       AccountDTO account = myAssetService.getAccountInfo(authInfo.getUserNum());
+       model.addAttribute("account", account);
+       return "member/myAsset";
+   }
 
-	
-	@GetMapping("/myAsset")
-	   public String myAsset(HttpSession session, Model model) {
-	       AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
-	       if (authInfo == null || !"mem".equals(authInfo.getGrade())) {
-	           return "redirect:/login";
-	       }
-	       AccountDTO account = myAssetService.getAccountInfo(authInfo.getUserNum());
-	       model.addAttribute("account", account);
-	       return "member/myAsset";
-	   }
-	
-	@PostMapping("/myAsset")
-	   public String updateAsset(AccountDTO dto, HttpSession session) {
-	       AuthInfoDTO authInfo = (AuthInfoDTO) session.getAttribute("authInfo");
-	       if (authInfo == null || !"mem".equals(authInfo.getGrade())) {
-	           return "redirect:/login";
-	       }
-	       dto.setMemberNum(authInfo.getUserNum()); // 세션에서 사용자 식별자 추출
-	       myAssetService.saveOrUpdateAccount(dto);
-	       return "redirect:/member/myAsset"; // 저장 후 다시 그 페이지로 이동
-	   }
-
-	
-	
+   
+   
 }
 
 

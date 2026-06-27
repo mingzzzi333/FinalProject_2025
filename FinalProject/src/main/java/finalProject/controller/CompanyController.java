@@ -1,28 +1,30 @@
 package finalProject.controller;
 
-import finalProject.domain.CompanyDTO;
-import finalProject.domain.CommunityDTO;
-import finalProject.service.community.CommunityListService;
-import finalProject.service.company.CompanyService;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import java.util.List;
+import finalProject.domain.AuthInfoDTO;
+import finalProject.domain.CompanyDTO;
+import finalProject.service.company.CompanyService;
+import finalProject.service.wish.WishService;
 
 @Controller
 @RequestMapping("/company")
 public class CompanyController {
 
     @Autowired
-    private CompanyService companyService;
-
+    CompanyService companyService;
     @Autowired
-    private CommunityListService communityListService;
+    private WishService wishService;
 
-    // 기업 목록 (검색 + 페이징)
     @GetMapping("/list")
     public String showCompanyList(@RequestParam(value = "keyword", required = false) String keyword,
                                   @RequestParam(value = "page", defaultValue = "1") int page,
@@ -45,7 +47,7 @@ public class CompanyController {
 
         int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 
-        // 페이징 그룹 계산
+        // ✨ 페이징 그룹 계산
         int startPage = ((page - 1) / pageGroupSize) * pageGroupSize + 1;
         int endPage = startPage + pageGroupSize - 1;
         if (endPage > totalPages) {
@@ -67,13 +69,30 @@ public class CompanyController {
         return "company/companyList";
     }
 
-    // 기업 상세 정보
     @GetMapping("/{companyNum}")
     public String showCompanyDetail(@PathVariable("companyNum") String companyNum, Model model) {
         CompanyDTO company = companyService.getCompanyByNum(companyNum);
         if (company == null) {
             return "redirect:/company/list";
         }
+        model.addAttribute("company", company);
+        return "company/companyDetail";
+    }
+    
+
+    @GetMapping("/detail")
+    public String companyDetail(@RequestParam("companyNum") String companyNum,
+                               @SessionAttribute("authInfo") AuthInfoDTO auth,
+                               Model model) {
+        CompanyDTO company = companyService.getCompanyByNum(companyNum);
+        if (company == null) {
+            return "redirect:/company/list";
+        }
+
+        boolean isWished = wishService.isWishedByUserId(companyNum, auth.getUserId());
+        company.setWished(isWished);
+        
+
         model.addAttribute("company", company);
         return "company/companyDetail";
     }

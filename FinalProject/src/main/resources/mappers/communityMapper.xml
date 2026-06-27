@@ -11,45 +11,72 @@
   </sql>
 
   <!-- 글 등록 -->
-  <insert id="insertCommunity" parameterType="finalProject.domain.CommunityDTO">
-    INSERT INTO COMMUNITY (
-      COMMU_NUM, BOARD_NUM, EMPLOYEE_NUM, MEMBER_NUM, COMPANY_NUM,
-      COMMU_SUBJECT, COMMU_REGIST, COMMU_UPDATE,
-      COMMU_CONTENTS, COMMU_IMAGE, COMMU_VIEWS, COMMU_GOOD,
-      COMMU_STORE_NAME, COMMU_ORIGINAL_NAME, COMMU_IMAGE_ORIGINAL_NAME
-    ) VALUES (
-      COMMUNITY_SEQ.NEXTVAL,
-      #{boardNum}, #{employeeNum, jdbcType=VARCHAR}, #{memberNum, jdbcType=VARCHAR}, #{companyNum, jdbcType=VARCHAR},
-      #{commuSubject}, SYSDATE, SYSDATE,
-      #{commuContents}, #{commuImageStoreName, jdbcType=VARCHAR}, 0, 0,
-      #{commuStoreName, jdbcType=VARCHAR}, #{commuOriginalName, jdbcType=VARCHAR}, #{commuImageOriginalName, jdbcType=VARCHAR}
-    )
-  </insert>
+<insert id="insertCommunity" parameterType="finalProject.domain.CommunityDTO">
+  INSERT INTO COMMUNITY (
+    COMMU_NUM, BOARD_NUM, EMPLOYEE_NUM, MEMBER_NUM, COMPANY_NUM,
+    COMMU_SUBJECT, COMMU_REGIST, COMMU_UPDATE,
+    COMMU_CONTENTS, COMMU_IMAGE_STORE_NAME, COMMU_VIEWS, COMMU_GOOD,
+    COMMU_IMAGE_ORIGINAL_NAME
+  ) VALUES (
+    COMMUNITY_SEQ.NEXTVAL,
+    #{boardNum}, #{employeeNum, jdbcType=VARCHAR}, #{memberNum, jdbcType=VARCHAR}, #{companyNum, jdbcType=VARCHAR},
+    #{commuSubject}, SYSDATE, SYSDATE,
+    #{commuContents}, #{commuImageStoreName, jdbcType=VARCHAR}, 0, 0,
+    #{commuImageOriginalName, jdbcType=VARCHAR}
+  )
+</insert>
 
-  <!-- 글 수정 -->
-  <update id="updateCommunity" parameterType="finalProject.domain.CommunityDTO">
-    UPDATE COMMUNITY
-    SET
-      COMMU_SUBJECT = #{commuSubject},
-      COMMU_CONTENTS = #{commuContents},
-      COMMU_UPDATE = SYSDATE,
-      COMMU_IMAGE = #{commuImageStoreName, jdbcType=VARCHAR},
-      COMMU_IMAGE_ORIGINAL_NAME = #{commuImageOriginalName, jdbcType=VARCHAR},
-      COMMU_STORE_NAME = #{commuStoreName, jdbcType=VARCHAR},
-      COMMU_ORIGINAL_NAME = #{commuOriginalName, jdbcType=VARCHAR}
-    WHERE COMMU_NUM = #{commuNum}
-  </update>
-  
-  <!-- 리스트 -->
+
+
+<update id="updateCommunity" parameterType="finalProject.domain.CommunityDTO">
+  UPDATE COMMUNITY
+  SET
+    COMMU_SUBJECT = #{commuSubject},
+    COMMU_CONTENTS = #{commuContents},
+    COMMU_UPDATE = SYSDATE,
+    COMMU_IMAGE_STORE_NAME = #{commuImageStoreName, jdbcType=VARCHAR},
+    COMMU_IMAGE_ORIGINAL_NAME = #{commuImageOriginalName, jdbcType=VARCHAR}
+  WHERE COMMU_NUM = #{commuNum}
+</update>
+
+
+
+ 
   <select id="selectAll" resultType="finalProject.domain.CommunityDTO">
+  SELECT 
+    COMMU_NUM, BOARD_NUM, EMPLOYEE_NUM, MEMBER_NUM, COMPANY_NUM,
+    COMMU_SUBJECT, COMMU_REGIST, COMMU_UPDATE,
+    COMMU_CONTENTS, COMMU_IMAGE, COMMU_VIEWS, COMMU_GOOD,
+    COMMU_IMAGE_STORE_NAME, COMMU_IMAGE_ORIGINAL_NAME
+  FROM COMMUNITY
+  ORDER BY COMMU_REGIST DESC
+</select>
+ 
+ <select id="selectByBoardNum" parameterType="int" resultType="finalProject.domain.CommunityDTO">
     SELECT 
-      COMMU_NUM, BOARD_NUM, EMPLOYEE_NUM, MEMBER_NUM, COMPANY_NUM,
-      COMMU_SUBJECT, COMMU_REGIST, COMMU_UPDATE,
-      COMMU_CONTENTS, COMMU_IMAGE, COMMU_VIEWS, COMMU_GOOD,
-      COMMU_STORE_NAME, COMMU_ORIGINAL_NAME, COMMU_IMAGE_ORIGINAL_NAME
-    FROM COMMUNITY
-    ORDER BY COMMU_REGIST DESC
-  </select>
+      c.COMMU_NUM, c.BOARD_NUM, c.EMPLOYEE_NUM, c.MEMBER_NUM, c.COMPANY_NUM,
+      c.COMMU_SUBJECT, c.COMMU_REGIST, c.COMMU_UPDATE,
+      c.COMMU_CONTENTS, c.COMMU_IMAGE, c.COMMU_VIEWS, c.COMMU_GOOD,
+      c.COMMU_IMAGE_STORE_NAME, c.COMMU_IMAGE_ORIGINAL_NAME,
+      m.MEMBER_NAME AS writerName
+    FROM COMMUNITY c
+    LEFT JOIN MEMBER m ON c.MEMBER_NUM = m.MEMBER_NUM
+    WHERE c.BOARD_NUM = #{boardNum}
+    ORDER BY c.COMMU_REGIST DESC
+</select>
+
+<select id="selectCommunityById" parameterType="int" resultType="finalProject.domain.CommunityDTO">
+    SELECT 
+        c.COMMU_NUM, c.BOARD_NUM, c.EMPLOYEE_NUM, c.MEMBER_NUM, c.COMPANY_NUM,
+        c.COMMU_SUBJECT, c.COMMU_REGIST, c.COMMU_UPDATE,
+        c.COMMU_CONTENTS, c.COMMU_IMAGE, c.COMMU_VIEWS, c.COMMU_GOOD,c.COMMU_IMAGE_STORE_NAME,
+          c.COMMU_IMAGE_STORE_NAME, c.COMMU_IMAGE_ORIGINAL_NAME,
+        m.MEMBER_NAME AS writerName
+    FROM COMMUNITY c
+    LEFT JOIN MEMBER m ON c.MEMBER_NUM = m.MEMBER_NUM
+    WHERE c.COMMU_NUM = #{commuNum}
+</select>
+
   
   <!-- 글 삭제 -->
   <delete id="deleteCommunity" parameterType="int">
@@ -71,32 +98,7 @@
     WHERE COMMU_NUM = #{commuNum}
   </update>
   
-<select id="selectByBoardNum" parameterType="int" resultType="finalProject.domain.CommunityDTO">
-    SELECT 
-      c.COMMU_NUM, c.BOARD_NUM, c.EMPLOYEE_NUM, c.MEMBER_NUM, c.COMPANY_NUM,
-      c.COMMU_SUBJECT, c.COMMU_REGIST, c.COMMU_UPDATE,
-      c.COMMU_CONTENTS, c.COMMU_IMAGE, c.COMMU_VIEWS, c.COMMU_GOOD,
-      c.COMMU_STORE_NAME, c.COMMU_ORIGINAL_NAME, c.COMMU_IMAGE_ORIGINAL_NAME,
-      m.MEMBER_NAME AS writerName
-    FROM COMMUNITY c
-    LEFT JOIN MEMBER m ON c.MEMBER_NUM = m.MEMBER_NUM
-    WHERE c.BOARD_NUM = #{boardNum}
-    ORDER BY c.COMMU_REGIST DESC
-</select>
-
   
-<select id="selectCommunityById" parameterType="int" resultType="finalProject.domain.CommunityDTO">
-    SELECT 
-        c.COMMU_NUM, c.BOARD_NUM, c.EMPLOYEE_NUM, c.MEMBER_NUM, c.COMPANY_NUM,
-        c.COMMU_SUBJECT, c.COMMU_REGIST, c.COMMU_UPDATE,
-        c.COMMU_CONTENTS, c.COMMU_IMAGE, c.COMMU_VIEWS, c.COMMU_GOOD,
-        c.COMMU_STORE_NAME, c.COMMU_ORIGINAL_NAME, c.COMMU_IMAGE_ORIGINAL_NAME,
-        m.MEMBER_NAME AS writerName
-    FROM COMMUNITY c
-    LEFT JOIN MEMBER m ON c.MEMBER_NUM = m.MEMBER_NUM
-    WHERE c.COMMU_NUM = #{commuNum}
-</select>
-
   <!-- 사용자가 좋아요를 눌렀는지 확인하는 쿼리 -->
   <select id="hasUserLiked" resultType="int" parameterType="map">
     SELECT COUNT(*)
@@ -127,7 +129,8 @@
     WHERE target_type = #{targetType}
       AND target_id = #{targetId}
   </select>
-  <select id="selectTop5ByLikes" resultType="finalProject.domain.CommunityDTO">
+  
+    <select id="selectTop5ByLikes" resultType="finalProject.domain.CommunityDTO">
 	    SELECT
 	        commu_num AS commuNum,
 	        commu_subject AS commuSubject,
@@ -137,7 +140,5 @@
 	    ORDER BY commu_good DESC
 	    FETCH FIRST 5 ROWS ONLY
 	</select>
-
-  
 
 </mapper>

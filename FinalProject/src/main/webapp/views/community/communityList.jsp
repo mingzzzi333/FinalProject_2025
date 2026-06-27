@@ -70,10 +70,6 @@
             font-size: 15px;
             color: #555;
         }
-        .no-style-link {
-            color: #fff;
-            text-decoration: none;
-        }
         .nav-links a {
             margin-right: 20px;
             color: #555;
@@ -135,31 +131,55 @@
             padding-bottom: 15px;
             border-bottom: 3px solid #ff6b6b;
         }
-
-        /* 글쓰기 버튼 */
+		/*글쓰기, 목록*/
         .write-section {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        .write-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ff5252);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-        }
-        .write-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-            background: linear-gradient(135deg, #e85757, #f44336);
-        }
+		    display: flex;
+		    justify-content: space-between; /* 왼쪽-오른쪽 배치 */
+		    align-items: center;
+		    margin-bottom: 20px;
+		}
+		
+		.list-btn {
+		    background: #e0e0e0; /* 회색 */
+		    color: #555;
+		    padding: 12px 24px;
+		    border-radius: 25px;
+		    text-decoration: none;
+		    font-weight: 600;
+		    font-size: 14px;
+		    display: inline-flex;
+		    align-items: center;
+		    gap: 8px;
+		    transition: all 0.3s ease;
+		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+		}
+		
+		.list-btn:hover {
+		    background: #d5d5d5;
+		    transform: translateY(-1px);
+		}
+		
+		.write-btn {
+		    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+		    color: white;
+		    padding: 12px 24px;
+		    border-radius: 25px;
+		    text-decoration: none;
+		    font-weight: 600;
+		    font-size: 14px;
+		    display: inline-flex;
+		    align-items: center;
+		    gap: 8px;
+		    transition: all 0.3s ease;
+		    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+		}
+		
+		.write-btn:hover {
+		    transform: translateY(-2px);
+		    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+		    background: linear-gradient(135deg, #e85757, #f44336);
+		}
+
 
         /* 게시글 리스트 컨테이너 */
         .post-list-container {
@@ -290,7 +310,7 @@
 
 <!-- 헤더 1열 -->
 <div class="header-line1">
-    <div><a href="/home" class="no-style-link">INVEST YATRA</a></div>
+    <a href="/home" style="color: inherit; text-decoration: none;">INVEST YATRA</a>
     <div class="auth-links">
         <c:choose>
             <c:when test="${not empty authInfo}">
@@ -324,16 +344,21 @@
 <div class="content-area">
     <!-- 페이지 제목 -->
     <div class="page-title">
-        게시판 번호: ${boardNum} - 게시글 목록
+        ${param.boardTitle} - 게시글 목록
     </div>
 
-    <!-- 글쓰기 버튼 -->
-    <div class="write-section">
-        <a href="write?boardNum=${boardNum}" class="write-btn">
-            <i class="fas fa-pen"></i>
-            글쓰기
-        </a>
-    </div>
+    <!-- 글쓰기 버튼 영역 -->
+	<div class="write-section">
+	    <a href="/community/back" class="list-btn">
+	        <i class="fas fa-list"></i>
+	        목록
+	    </a>
+	    <a href="write?boardNum=${boardNum}" class="write-btn">
+	        <i class="fas fa-pen"></i>
+	        글쓰기
+	    </a>
+	</div>
+
 
     <!-- 게시글 목록 -->
     <div class="post-list-container">
@@ -358,8 +383,9 @@
                         <!-- 제목 -->
                         <div class="post-title">
                             <a href="detail?commuNum=${item.commuNum}&boardNum=${boardNum}">
-                                ${item.commuSubject}
-                            </a>
+                         ${item.commuSubject}
+                     </a>
+
                         </div>
                         
                         <!-- 작성자 -->

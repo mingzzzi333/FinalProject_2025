@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page session="true" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>기업 목록</title>
+  <title>관심기업 목록</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
@@ -121,103 +121,99 @@
         background: #ffffff;
         min-height: calc(100vh - 150px);
         padding: 30px;
+        margin: 0 24px;
+        border-radius: 12px;
+        margin-top: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    /* 페이지 제목 */
-    .page-title {
-        color: #FF6B6B;
-        font-size: 32px;
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 30px;
-        letter-spacing: 1px;
-    }
-
-    /* 기업 검색 폼 */
-    .search-form {
+    /* 찜목록 페이지 전용 스타일 */
+    .wishlist-header {
         display: flex;
-        justify-content: center;
-        margin: 30px 0;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #ffe5e5;
     }
 
-    .search-input {
-        padding: 12px 20px;
-        font-size: 16px;
-        border: 2px solid #e0e7ff;
-        border-right: none;
-        border-radius: 25px 0 0 25px;
-        outline: none;
-        width: 400px;
-        transition: all 0.3s ease;
-        font-family: 'Montserrat', sans-serif;
+    .wishlist-title {
+        color: #FF6B6B;
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
     }
 
-    .search-input:focus {
-        border-color: #FF6B6B;
-        box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+    .wishlist-count {
+        background: #fff0f0;
+        color: #FF6B6B;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        border: 2px solid #ffe5e5;
     }
 
-    .search-button {
-        padding: 12px 25px;
-        font-size: 16px;
-        background-color: #FF6B6B;
-        color: white;
-        border: 2px solid #FF6B6B;
-        border-radius: 0 25px 25px 0;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: 'Montserrat', sans-serif;
+    .message {
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
         font-weight: 500;
     }
 
-    .search-button:hover {
-        background-color: #e85757;
-        border-color: #e85757;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+    .message.info {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
     }
 
-    /* 기업 목록 테이블 */
-    .company-table {
+    .message.error {
+        background-color: #ffebee;
+        color: #d32f2f;
+        border: 1px solid #ffcdd2;
+    }
+
+    .wishlist-table {
         width: 100%;
         border-collapse: collapse;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        font-size: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         background: #fff;
-        margin: 30px 0;
     }
 
-    .company-table thead {
+    .wishlist-table thead {
         background: linear-gradient(135deg, #FF6B6B, #ff8a8a);
     }
 
-    .company-table th {
-        padding: 18px 20px;
+    .wishlist-table th {
+        padding: 18px 24px;
+        text-align: left;
         color: #fff;
         font-weight: 600;
-        text-align: center;
+        font-size: 16px;
         letter-spacing: 0.5px;
     }
 
-    .company-table td {
-        padding: 16px 20px;
-        text-align: center;
-        border-bottom: 1px solid #f0f0f0;
+    .wishlist-table td {
+        padding: 16px 24px;
+        border-bottom: 1px solid #f5f5f5;
         color: #555;
+        font-size: 15px;
+    }
+
+    .wishlist-table tr:hover {
+        background-color: #fef9f9;
+        transform: translateY(-1px);
         transition: all 0.3s ease;
     }
 
-    .company-table tr:hover {
-        background-color: #fef9f9;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.1);
+    .wishlist-table tr:last-child td {
+        border-bottom: none;
     }
 
     .company-link {
-        text-decoration: none;
         color: #FF6B6B;
+        text-decoration: none;
         font-weight: 600;
         transition: all 0.3s ease;
     }
@@ -227,44 +223,20 @@
         text-decoration: underline;
     }
 
-    /* 페이징 */
-    .pagination {
-        margin: 50px 0;
+    .empty-message {
         text-align: center;
+        padding: 60px 20px;
+        color: #999;
+        font-size: 18px;
+        background: #fafafa;
+        border-radius: 12px;
+        border: 2px dashed #ddd;
     }
 
-    .page-btn {
-        display: inline-block;
-        margin: 0 4px;
-        padding: 10px 15px;
-        background-color: #fff;
-        color: #666;
-        border: 2px solid #e0e7ff;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        min-width: 40px;
-        font-family: 'Montserrat', sans-serif;
-    }
-
-    .page-btn:hover {
-        background-color: #FF6B6B;
-        color: #fff;
-        border-color: #FF6B6B;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
-    }
-
-    .page-btn.active {
-        background-color: #FF6B6B;
-        color: #fff;
-        border-color: #FF6B6B;
-        pointer-events: none;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+    .empty-message .icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+        color: #ccc;
     }
 
     /* 슬라이딩 패널 및 오버레이 */
@@ -340,14 +312,6 @@
         background-color: #FFDCDC;
         color: #FF6B6B;
     }
-
-    /* 검색 결과 없음 스타일 */
-    .no-results {
-        text-align: center;
-        color: #999;
-        font-size: 16px;
-        padding: 40px 0;
-    }
   </style>
 </head>
 <body>
@@ -400,79 +364,65 @@
   </div>
 </div>
 
-<!-- 본문 영역 -->
+<!-- 본문 영역: 찜목록 -->
 <div class="main-content">
-    <h1 class="page-title">📋 기업 목록</h1>
-    
-    <form action="/company/list" method="get" class="search-form">
-        <input type="text" name="keyword" placeholder="🔍 기업명을 검색해보세요" value="${param.keyword}" class="search-input">
-        <button type="submit" class="search-button">검색</button>
-    </form>
+  <div class="wishlist-header">
+    <h1 class="wishlist-title">💝 관심기업 목록</h1>
+    <div class="wishlist-count">총 ${wishCount}개 기업</div>
+  </div>
 
-    <table class="company-table">
+  <!-- 메시지 표시 -->
+  <c:if test="${not empty message}">
+    <div class="message info">${message}</div>
+  </c:if>
+
+  <c:if test="${not empty error}">
+    <div class="message error">${error}</div>
+  </c:if>
+
+  <!-- 찜목록 테이블 -->
+  <c:choose>
+    <c:when test="${wishCount > 0}">
+      <table class="wishlist-table">
         <thead>
-            <tr>
-                <th>기업코드</th>
-                <th>기업명</th>
-                <th>대표자</th>
-                <th>업종</th>
-                <th>설립일</th>
-            </tr>
+          <tr>
+            <th>회사명</th>
+            <th>찜 등록일</th>
+            <th>작업</th>
+          </tr>
         </thead>
         <tbody>
-            <c:choose>
-                <c:when test="${not empty companyList}">
-                    <c:if test="${currentPage == 1}">
-                        <tr>
-                            <td>005930</td>
-                            <td><a href="/company/samsung" class="company-link">삼성전자</a></td>
-                            <td>이재용</td>
-                            <td>이동전화기 및 반도체, 기타 가전제품 제조업</td>
-                            <td>1969-01-13</td>
-                        </tr>
-                    </c:if>
-                    <c:forEach var="company" items="${companyList}">
-                        <tr>
-                            <td>${company.companyNum}</td>
-                            <td><a href="/company/${company.companyNum}" class="company-link">${company.companyName}</a></td>
-                            <td>${company.companyCeoName}</td>
-                            <td>${company.companyType}</td>
-                            <td><fmt:formatDate value="${company.companyYear}" pattern="yyyy-MM-dd"/></td>
-                        </tr>
-                    </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <tr>
-                        <td colspan="5" class="no-results">📭 검색 결과가 없습니다</td>
-                    </tr>
-                </c:otherwise>
-            </c:choose>
+          <c:forEach var="wish" items="${wishList}">
+            <tr>
+              <td>
+                <a href="/company/detail?companyNum=${wish.companyNum}" class="company-link">
+                  ${wish.companyName}
+                </a>
+              </td>
+              <td>
+                <fmt:formatDate value="${wish.wishDate}" pattern="yyyy년 MM월 dd일" />
+              </td>
+              <td>
+                <button onclick="removeWish('${wish.companyNum}')" 
+                 style="background:#ff6b6b; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px;">
+                삭제
+            </button>
+              </td>
+            </tr>
+          </c:forEach>
         </tbody>
-    </table>
-
-    <!-- 페이징 영역 -->
-    <div class="pagination">
-        <c:if test="${totalPages > 1}">
-            <c:if test="${hasPrev}">
-                <a href="?page=${startPage - 1}&keyword=${param.keyword}" class="page-btn">◀◀</a>
-            </c:if>
-
-            <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                <c:choose>
-                    <c:when test="${i == currentPage}">
-                        <span class="page-btn active">${i}</span>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="?page=${i}&keyword=${param.keyword}" class="page-btn">${i}</a>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-
-            <c:if test="${hasNext}">
-                <a href="?page=${endPage + 1}&keyword=${param.keyword}" class="page-btn">▶▶</a>
-            </c:if>
-        </c:if>
-    </div>
+      </table>
+    </c:when>
+    <c:otherwise>
+      <div class="empty-message">
+        <div class="icon">📭</div>
+        <div>아직 관심 등록한 기업이 없습니다.</div>
+        <div style="font-size: 14px; margin-top: 10px; color: #bbb;">
+          기업 상세페이지에서 ❤️ 버튼을 클릭하여 관심기업을 등록해보세요!
+        </div>
+      </div>
+    </c:otherwise>
+  </c:choose>
 </div>
 
 <!-- 오버레이 -->
@@ -487,7 +437,7 @@
             <li><a href="/member/myPage">회원정보</a></li>
             <li><a href="/member/myAsset">내 자산</a></li>
             <li><a href="/myStoke">보유종목</a></li>
-            <li><a href="/wish">관심종목</a></li>
+            <li><a href="/wish/wishList" style="background-color: #FFDCDC; color: #FF6B6B;">관심종목</a></li>
             <li><a href="/inquiry">문의하기</a></li>
         </ul>
     </div>
@@ -502,6 +452,29 @@ function openMyPage() {
 function closeMyPage() {
     document.getElementById("myPagePanel").classList.remove("open");
     document.getElementById("overlay").style.display = "none";
+}
+
+function removeWish(companyNum) {
+    if (confirm('해당 기업을 관심목록에서 삭제하시겠습니까?')) {
+        fetch('/wish/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'companyNum=' + encodeURIComponent(companyNum)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('관심목록에서 삭제되었습니다.');
+                location.reload();
+            } else {
+                alert('삭제 중 오류가 발생했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('삭제 중 오류가 발생했습니다.');
+        });
+    }
 }
 </script>
 </body>

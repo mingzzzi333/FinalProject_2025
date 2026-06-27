@@ -7,23 +7,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import finalProject.command.BoardCommand;
 import finalProject.domain.AuthInfoDTO;
 import finalProject.domain.BoardDTO;
 import finalProject.mapper.BoardMapper;
+import finalProject.model.NewsArticle;
 import finalProject.service.board.BoardAutoNumService;
 import finalProject.service.board.BoardWriteService;
+import finalProject.service.news.NewsCrawlerService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AdminController {
+   
+   private static final int PAGE_SIZE = 10;
    @Autowired
    BoardWriteService boardWriteService;
    @Autowired
    BoardAutoNumService boardAutoNumService;
    @Autowired
    BoardMapper boardMapper;
+    @Autowired
+    NewsCrawlerService newsCrawlerService;
    
    //관리하기 페이지로 이동
     @GetMapping("/adminMain")
@@ -36,9 +43,6 @@ public class AdminController {
     public String commuManager() {
        return "news/newsAdmin";
     }
-    
-    
-    
     
     //커뮤니티 관리 페이지
     @GetMapping("/admin/communityAdmin")
@@ -70,6 +74,25 @@ public class AdminController {
         System.out.println("boardTitle = " + boardCommand.getBoardTitle());
         boardWriteService.execute(boardCommand);
         return "redirect:/admin/communityAdmin";
+    }
+   
+    
+    @GetMapping("/admin/news")
+    public String adminNews(@RequestParam(name = "page", defaultValue = "1") int page, Model model) {
+        List<NewsArticle> allNews = newsCrawlerService.getAllNews();
+        int totalNews = allNews.size();
+        int totalPages = (int) Math.ceil((double) totalNews / PAGE_SIZE);
+
+        int start = (page - 1) * PAGE_SIZE;
+        int end = Math.min(start + PAGE_SIZE, totalNews);
+        List<NewsArticle> pageNews = allNews.subList(start, end);
+
+        model.addAttribute("newsList", pageNews);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageSize", PAGE_SIZE);
+
+        return "admin/adminNews";  // admin 폴더 안에 adminNews.jsp 뷰
     }
 
     }

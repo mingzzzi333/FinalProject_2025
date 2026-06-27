@@ -24,7 +24,9 @@ public class StockRepository {
     		      "    symbol, " +
     		      "    price, " +
     		      "    volume, " +
-    		      "    cumulative_volume " +
+    		      "    cumulative_volume, " +  // ✅ 기존 필드
+    		      "    high_price, " +         // ✅ 고가 추가
+    		      "    low_price " +           // ✅ 저가 추가
     		      "FROM ( " +
     		      "    SELECT " +
     		      "        ROW_NUMBER() OVER ( " +
@@ -35,7 +37,9 @@ public class StockRepository {
     		      "        symbol, " +
     		      "        price, " +
     		      "        volume, " +
-    		      "        cumulative_volume " +
+    		      "        cumulative_volume, " +
+    		      "        high_price, " +
+    		      "        low_price " +
     		      "    FROM stockData " +
     		      "    WHERE REGEXP_LIKE(trading_hours, '^[0-9]+$') " + // 숫자 필터링
     		      "      AND ( " +
@@ -53,7 +57,8 @@ public class StockRepository {
     		      "      ) " +
     		      ") " +
     		      "WHERE rn = 1 " +
-    		      "ORDER BY trading_date DESC";
+    		      "ORDER BY trading_date ASC";
+
 
 
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(StockA3.class));
